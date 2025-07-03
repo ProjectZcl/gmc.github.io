@@ -10,17 +10,17 @@
     <script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
     <style>
         :root {
-            --primary-color: #4361ee;
-            --secondary-color: #3f37c9;
-            --accent-color: #4895ef;
-            --light-color: #f8f9fa;
-            --dark-color: #212529;
-            --success-color: #4cc9f0;
-            --warning-color: #f72585;
-            --info-color: #7209b7;
-            --border-radius: 12px;
-            --box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-            --transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+            --primary-color: #4f8cff;
+            --secondary-color: #6c47ff;
+            --accent-color: #00c9a7;
+            --light-color: #f7faff;
+            --dark-color: #232946;
+            --success-color: #43e97b;
+            --warning-color: #ffb86b;
+            --info-color: #3a86ff;
+            --border-radius: 18px;
+            --box-shadow: 0 6px 32px rgba(79,140,255,0.08);
+            --transition: all 0.25s cubic-bezier(0.4,0,0.2,1);
         }
 
         * {
@@ -30,13 +30,12 @@
         }
 
         body {
-            font-family: 'Noto Sans SC', sans-serif;
-            line-height: 1.6;
-            background-color: #f5f7ff;
+            font-family: 'Noto Sans SC', 'Segoe UI', Arial, sans-serif;
+            background: linear-gradient(135deg, #f7faff 0%, #e3e8ff 100%);
             color: var(--dark-color);
-            padding: 0;
-            margin: 0;
             min-height: 100vh;
+            margin: 0;
+            padding: 0;
             display: flex;
             flex-direction: column;
         }
@@ -44,82 +43,92 @@
         .container {
             max-width: 1400px;
             margin: 0 auto;
-            padding: 20px;
+            padding: 32px 2vw 0 2vw;
             flex: 1;
         }
 
         /* 导航栏样式 */
         .navbar {
-            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
-            color: white;
-            padding: 1rem 2rem;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            background: linear-gradient(90deg, rgba(79,140,255,0.95) 0%, rgba(108,71,255,0.95) 100%);
+            color: #fff;
             position: sticky;
             top: 0;
             z-index: 1000;
+            box-shadow: 0 2px 16px rgba(79,140,255,0.08);
             display: flex;
-            justify-content: space-between;
             align-items: center;
+            justify-content: space-between;
+            padding: 0.7rem 3vw;
+            backdrop-filter: blur(8px);
         }
 
         .logo {
             display: flex;
             align-items: center;
-            font-size: 1.5rem;
-            font-weight: 700;
+            font-size: 2rem;
+            font-weight: 800;
+            letter-spacing: 1px;
+            gap: 0.7rem;
         }
 
         .logo i {
-            margin-right: 0.8rem;
-            font-size: 1.8rem;
+            font-size: 2.2rem;
+            color: var(--accent-color);
         }
 
         .nav-links {
             display: flex;
-            gap: 1.5rem;
+            gap: 2.2rem;
         }
 
         .nav-links a {
-            color: white;
+            color: #fff;
             text-decoration: none;
             font-weight: 500;
+            font-size: 1.1rem;
+            padding: 0.3rem 0.7rem;
+            border-radius: 8px;
             transition: var(--transition);
-            display: flex;
-            align-items: center;
         }
 
         .nav-links a:hover {
-            transform: translateY(-2px);
-            text-shadow: 0 2px 8px rgba(255, 255, 255, 0.3);
+            background: rgba(255,255,255,0.12);
+            color: var(--accent-color);
         }
 
-        .nav-links a i {
-            margin-right: 0.5rem;
+        .lang-switch {
+            display: flex;
+            align-items: center;
+            gap: 0.2rem;
+        }
+
+        .lang-switch .btn {
+            min-width: 60px;
+            font-size: 1rem;
+            border-radius: 8px;
+            padding: 0.3rem 0.8rem;
         }
 
         /* 主标题区域 */
         .hero {
-            background: linear-gradient(135deg, #4cc9f0, #4895ef);
-            color: white;
-            padding: 3rem 0;
-            margin-bottom: 2rem;
+            background: linear-gradient(120deg, #4f8cff 0%, #6c47ff 100%);
+            color: #fff;
             border-radius: var(--border-radius);
             box-shadow: var(--box-shadow);
-            text-align: center;
+            margin-bottom: 2.5rem;
+            padding: 3.5rem 0 2.5rem 0;
             position: relative;
             overflow: hidden;
+            text-align: center;
         }
 
         .hero::before {
-            content: "";
+            content: '';
             position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="none"><path d="M0,0 L100,0 L100,100 Q50,80 0,100 Z" fill="rgba(255,255,255,0.1)"/></svg>');
-            background-size: 100% 100%;
-            opacity: 0.3;
+            left: 0; right: 0; top: 0; bottom: 0;
+            background: url('data:image/svg+xml;utf8,<svg width="100%" height="100%" viewBox="0 0 1440 320" fill="none" xmlns="http://www.w3.org/2000/svg"><path fill="%23fff" fill-opacity="0.08" d="M0,160L60,170.7C120,181,240,203,360,197.3C480,192,600,160,720,133.3C840,107,960,85,1080,101.3C1200,117,1320,171,1380,197.3L1440,224L1440,0L1380,0C1320,0,1200,0,1080,0C960,0,840,0,720,0C600,0,480,0,360,0C240,0,120,0,60,0L0,0Z"></path></svg>');
+            background-size: cover;
+            z-index: 0;
         }
 
         .hero-content {
@@ -130,175 +139,247 @@
             padding: 0 20px;
         }
 
-        h1 {
-            font-size: 2.8rem;
-            margin-bottom: 1rem;
-            font-weight: 700;
+        .hero-content h1 {
+            font-size: 3rem;
+            font-weight: 900;
+            margin-bottom: 1.2rem;
+            letter-spacing: 1px;
         }
 
-        .subtitle {
-            font-size: 1.2rem;
-            opacity: 0.9;
-            font-weight: 300;
-            margin-bottom: 1.5rem;
+        .hero-content .subtitle {
+            font-size: 1.3rem;
+            font-weight: 400;
+            opacity: 0.95;
+            margin-bottom: 2.2rem;
         }
 
         /* 卡片样式 */
         .card {
-            background-color: white;
+            background: #fff;
             border-radius: var(--border-radius);
             box-shadow: var(--box-shadow);
-            padding: 1.8rem;
-            margin-bottom: 2rem;
-            transition: var(--transition);
+            padding: 2.2rem 2vw 1.5rem 2vw;
+            margin-bottom: 2.2rem;
             position: relative;
-            overflow: hidden;
-        }
-
-        .card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.12);
+            overflow: visible;
         }
 
         .card-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 1.5rem;
-            padding-bottom: 0.8rem;
-            border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+            margin-bottom: 1.2rem;
+            padding-bottom: 0.7rem;
+            border-bottom: 1.5px solid #f0f4ff;
         }
 
         .card-title {
-            font-size: 1.4rem;
+            font-size: 1.5rem;
             color: var(--primary-color);
+            font-weight: 800;
             display: flex;
             align-items: center;
-            margin: 0;
-        }
-
-        .card-title i {
-            margin-right: 0.8rem;
-            font-size: 1.3rem;
+            gap: 0.7rem;
         }
 
         .card-actions {
             display: flex;
-            gap: 0.8rem;
+            gap: 1rem;
         }
 
         /* 按钮样式 */
         .btn {
-            background-color: var(--primary-color);
-            color: white;
+            background: linear-gradient(90deg, var(--primary-color), var(--accent-color));
+            color: #fff;
             border: none;
-            padding: 0.8rem 1.5rem;
-            border-radius: 50px;
+            padding: 0.7rem 1.7rem;
+            border-radius: 12px;
             cursor: pointer;
-            font-size: 1rem;
-            font-weight: 500;
+            font-size: 1.05rem;
+            font-weight: 600;
             transition: var(--transition);
+            box-shadow: 0 2px 8px rgba(79,140,255,0.10);
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            box-shadow: 0 4px 6px rgba(67, 97, 238, 0.2);
         }
 
         .btn:hover {
-            background-color: var(--secondary-color);
-            transform: translateY(-2px);
-            box-shadow: 0 6px 12px rgba(67, 97, 238, 0.3);
-        }
-
-        .btn i {
-            margin-right: 0.6rem;
+            background: linear-gradient(90deg, var(--accent-color), var(--primary-color));
+            color: #fff;
+            transform: translateY(-2px) scale(1.04);
         }
 
         .btn-outline {
-            background-color: transparent;
+            background: #fff;
             border: 2px solid var(--primary-color);
             color: var(--primary-color);
+            box-shadow: none;
         }
 
         .btn-outline:hover {
-            background-color: var(--primary-color);
-            color: white;
+            background: var(--primary-color);
+            color: #fff;
         }
 
         .btn-sm {
-            padding: 0.5rem 1rem;
-            font-size: 0.9rem;
+            padding: 0.4rem 1.1rem;
+            font-size: 0.98rem;
+            border-radius: 8px;
         }
 
         /* 搜索区域 */
         .search-section {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            background: #fff;
+            border-radius: 16px;
+            box-shadow: 0 2px 16px rgba(79,140,255,0.10);
+            padding: 2rem 2vw 1.2rem 2vw;
+            margin: 0 auto 1.5rem auto;
+            display: flex;
+            flex-wrap: wrap;
             gap: 1.5rem;
-            margin-bottom: 1.5rem;
+            justify-content: center;
+            align-items: flex-end;
+            max-width: 900px;
+            position: relative;
+            z-index: 2;
         }
 
         .search-box {
+            flex: 1 1 220px;
+            min-width: 220px;
+            max-width: 320px;
             position: relative;
         }
 
         .search-box label {
-            display: block;
-            margin-bottom: 0.8rem;
-            font-weight: 500;
-            color: var(--dark-color);
+            font-weight: 600;
+            color: var(--primary-color);
+            margin-bottom: 0.5rem;
             display: flex;
             align-items: center;
+            font-size: 1.05rem;
         }
 
-        .search-box label i {
-            margin-right: 0.6rem;
-            color: var(--accent-color);
-        }
-
-        .search-box input, 
-        .search-box select {
+        .search-box input, .search-box select {
             width: 100%;
-            padding: 0.9rem 1.2rem;
-            padding-left: 3rem;
-            border: 1px solid #e0e0e0;
-            border-radius: 50px;
-            font-family: inherit;
-            font-size: 1rem;
+            padding: 0.8rem 1.2rem 0.8rem 2.5rem;
+            border: 1.5px solid #e0e6f7;
+            border-radius: 12px;
+            font-size: 1.05rem;
+            background: #f7faff;
             transition: var(--transition);
-            background-color: #f8f9ff;
+            margin-bottom: 0.2rem;
         }
 
-        .search-box input:focus, 
-        .search-box select:focus {
+        .search-box input:focus, .search-box select:focus {
+            border-color: var(--primary-color);
+            background: #fff;
             outline: none;
-            border-color: var(--accent-color);
-            box-shadow: 0 0 0 3px rgba(72, 149, 239, 0.2);
-            background-color: white;
         }
 
         .search-box i.fa-search {
             position: absolute;
-            left: 1.5rem;
-            top: 50%;
-            transform: translateY(-50%);
-            color: #aaa;
+            left: 1rem;
+            top: 2.2rem;
+            color: #b0b8d1;
+            font-size: 1.1rem;
+        }
+
+        #search-button {
+            margin-top: 0.5rem;
+            font-size: 1.1rem;
+            padding: 0.7rem 2.2rem;
+            border-radius: 12px;
+            background: linear-gradient(90deg, var(--primary-color), var(--accent-color));
+            box-shadow: 0 2px 8px rgba(79,140,255,0.10);
+            font-weight: 700;
+        }
+
+        #search-button:hover {
+            background: linear-gradient(90deg, var(--accent-color), var(--primary-color));
         }
 
         /* 筛选区域 */
         .filter-section {
-            margin-bottom: 2rem;
+            margin-bottom: 1.2rem;
         }
 
         .filter-row {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 1.5rem;
+            display: flex;
+            flex-wrap: nowrap;
+            gap: 1.2rem;
             margin-bottom: 1rem;
         }
 
         .filter-group {
-            position: relative;
+            flex: 1 1 0;
+            min-width: 0;
+            max-width: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+        }
+
+        .filter-group label {
+            margin-bottom: 0.5rem;
+            font-size: 1.05rem;
+            font-weight: 600;
+            color: var(--primary-color);
+        }
+
+        .filter-group select,
+        .filter-group input {
+            height: 48px;
+            min-height: 48px;
+            max-height: 48px;
+            box-sizing: border-box;
+        }
+
+        /* 美化高级筛选下拉框 */
+        .filter-group select {
+            appearance: none;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            background: #f7faff url('data:image/svg+xml;utf8,<svg fill="%234f8cff" height="20" viewBox="0 0 20 20" width="20" xmlns="http://www.w3.org/2000/svg"><path d="M7.293 7.293a1 1 0 011.414 0L10 8.586l1.293-1.293a1 1 0 111.414 1.414l-2 2a1 1 0 01-1.414 0l-2-2a1 1 0 010-1.414z"/></svg>') no-repeat right 1.2rem center/1.2em 1.2em;
+            border: 1.5px solid #e0e6f7;
+            border-radius: 12px;
+            padding: 0.8rem 2.5rem 0.8rem 1.2rem;
+            font-size: 1.05rem;
+            color: var(--dark-color);
+            font-family: inherit;
+            box-shadow: 0 1px 4px rgba(79,140,255,0.06);
+            transition: border-color 0.2s, box-shadow 0.2s;
+            cursor: pointer;
+        }
+        .filter-group select:focus {
+            border-color: var(--primary-color);
+            background-color: #fff;
+            box-shadow: 0 2px 8px rgba(79,140,255,0.12);
+            outline: none;
+        }
+        .filter-group select option {
+            color: var(--dark-color);
+            background: #fff;
+            font-size: 1.05rem;
+        }
+        @media (max-width: 600px) {
+            .filter-group select {
+                font-size: 1.15rem;
+                padding: 1rem 2.5rem 1rem 1.2rem;
+            }
+        }
+
+        @media (max-width: 900px) {
+            .filter-row {
+                flex-direction: column;
+                gap: 0.7rem;
+            }
+            .filter-group {
+                width: 100%;
+                min-width: 0;
+                max-width: 100%;
+            }
         }
 
         /* 结果统计 */
@@ -307,145 +388,126 @@
             justify-content: space-between;
             align-items: center;
             margin-bottom: 1.5rem;
-            padding: 1rem;
-            background-color: #f8f9ff;
+            padding: 1.2rem 1vw;
+            background: #f7faff;
             border-radius: var(--border-radius);
+            box-shadow: 0 1px 8px rgba(79,140,255,0.06);
         }
 
         .result-count {
-            font-weight: 500;
-            color: var(--dark-color);
+            font-weight: 700;
+            color: var(--primary-color);
+            font-size: 1.1rem;
             display: flex;
             align-items: center;
-        }
-
-        .result-count i {
-            margin-right: 0.6rem;
-            color: var(--accent-color);
+            gap: 0.5rem;
         }
 
         .result-actions {
             display: flex;
-            gap: 1rem;
+            gap: 1.2rem;
         }
 
         /* 结果列表 */
         .results-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
-            gap: 1.5rem;
+            grid-template-columns: repeat(auto-fill, minmax(370px, 1fr));
+            gap: 2rem;
         }
 
         .result-item {
-            background-color: white;
+            background: #fff;
             border-radius: var(--border-radius);
-            box-shadow: var(--box-shadow);
-            padding: 1.5rem;
+            box-shadow: 0 2px 16px rgba(79,140,255,0.10);
+            padding: 1.7rem 1.2rem 1.2rem 1.2rem;
             transition: var(--transition);
-            border-top: 4px solid var(--accent-color);
+            border-top: 5px solid var(--accent-color);
             display: flex;
             flex-direction: column;
+            min-height: 180px;
+            position: relative;
         }
 
         .result-item:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+            transform: translateY(-7px) scale(1.02);
+            box-shadow: 0 8px 32px rgba(79,140,255,0.16);
+            border-top: 5px solid var(--primary-color);
         }
 
         .result-header {
             display: flex;
-            justify-content: space-between;
+            justify-content: flex-start;
+            align-items: center;
             margin-bottom: 1rem;
-            padding-bottom: 0.8rem;
-            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+            gap: 1rem;
         }
 
         .result-title {
-            font-size: 1.2rem;
+            font-size: 1.25rem;
             color: var(--primary-color);
-            margin: 0;
+            font-weight: 800;
             display: flex;
             align-items: center;
-        }
-
-        .result-title i {
-            margin-right: 0.6rem;
-            color: var(--accent-color);
-        }
-
-        .result-badge {
-            background-color: var(--info-color);
-            color: white;
-            padding: 0.3rem 0.8rem;
-            border-radius: 50px;
-            font-size: 0.8rem;
-            font-weight: 500;
+            gap: 0.5rem;
         }
 
         .result-content {
             flex: 1;
+            margin-bottom: 0.7rem;
         }
 
         .result-row {
             display: flex;
-            margin-bottom: 0.8rem;
+            margin-bottom: 0.7rem;
             align-items: flex-start;
+            gap: 0.7rem;
         }
 
         .result-label {
-            font-weight: 500;
-            color: #666;
-            min-width: 100px;
+            font-weight: 600;
+            color: #6c47ff;
+            min-width: 110px;
             display: flex;
             align-items: center;
-        }
-
-        .result-label i {
-            margin-right: 0.5rem;
-            color: var(--accent-color);
-            width: 18px;
+            gap: 0.3rem;
         }
 
         .result-value {
             flex: 1;
             word-break: break-word;
+            color: var(--dark-color);
+            font-weight: 500;
         }
 
         .result-footer {
-            margin-top: 1rem;
-            padding-top: 1rem;
-            border-top: 1px solid rgba(0, 0, 0, 0.05);
+            margin-top: 0.7rem;
+            padding-top: 0.7rem;
+            border-top: 1px solid #f0f4ff;
             display: flex;
             justify-content: space-between;
             align-items: center;
+            font-size: 0.98rem;
+            color: #888;
         }
 
         .result-link {
             color: var(--primary-color);
             text-decoration: none;
-            font-weight: 500;
+            font-weight: 700;
             display: flex;
             align-items: center;
+            gap: 0.3rem;
             transition: var(--transition);
         }
 
         .result-link:hover {
-            color: var(--secondary-color);
-            transform: translateX(3px);
-        }
-
-        .result-link i {
-            margin-left: 0.5rem;
-            transition: var(--transition);
-        }
-
-        .result-link:hover i {
+            color: var(--accent-color);
             transform: translateX(3px);
         }
 
         /* 图表容器 */
         .chart-container {
-            height: 300px;
+            height: 340px;
             margin-top: 1.5rem;
             position: relative;
         }
@@ -454,9 +516,10 @@
         .empty-state {
             text-align: center;
             padding: 3rem 2rem;
-            background-color: white;
+            background: #fff;
             border-radius: var(--border-radius);
             box-shadow: var(--box-shadow);
+            color: var(--primary-color);
         }
 
         .empty-state i {
@@ -467,9 +530,9 @@
         }
 
         .empty-state h3 {
-            font-size: 1.5rem;
+            font-size: 1.7rem;
             margin-bottom: 1rem;
-            color: var(--dark-color);
+            color: var(--primary-color);
         }
 
         .empty-state p {
@@ -484,30 +547,46 @@
         .tag-cloud {
             display: flex;
             flex-wrap: wrap;
-            gap: 0.8rem;
-            margin-top: 1.5rem;
+            gap: 0.7rem;
+            margin-top: 1.2rem;
         }
 
         .tag {
-            background-color: #f0f4ff;
+            background: #e3e8ff;
             color: var(--primary-color);
-            padding: 0.5rem 1rem;
+            padding: 0.5rem 1.2rem;
             border-radius: 50px;
-            font-size: 0.9rem;
-            font-weight: 500;
+            font-size: 1rem;
+            font-weight: 600;
             transition: var(--transition);
             cursor: pointer;
+            box-shadow: 0 1px 4px rgba(79,140,255,0.07);
         }
 
-        .tag:hover {
-            background-color: var(--primary-color);
-            color: white;
-            transform: translateY(-2px);
+        .tag:hover, .tag.active {
+            background: linear-gradient(90deg, var(--primary-color), var(--accent-color));
+            color: #fff;
+            transform: translateY(-2px) scale(1.06);
         }
 
-        .tag.active {
-            background-color: var(--primary-color);
-            color: white;
+        /* 统计总览 */
+        .stats-overview {
+            display: flex;
+            gap: 2.5rem;
+            margin-bottom: 1.2rem;
+            font-size: 1.2rem;
+            color: var(--primary-color);
+            font-weight: 700;
+        }
+
+        .stats-overview span {
+            background: #f0f4ff;
+            border-radius: 20px;
+            padding: 0.5rem 1.5rem;
+            font-size: 1.3rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
         }
 
         /* 页脚 */
@@ -582,100 +661,25 @@
 
         /* 响应式设计 */
         @media (max-width: 1200px) {
-            .container {
-                padding: 15px;
-            }
-            
-            .hero {
-                padding: 2.5rem 0;
-            }
-            
-            h1 {
-                font-size: 2.2rem;
-            }
+            .container { padding: 18px 1vw 0 1vw; }
+            .hero-content h1 { font-size: 2.2rem; }
         }
 
-        @media (max-width: 992px) {
-            .navbar {
-                flex-direction: column;
-                padding: 1rem;
-            }
-            
-            .logo {
-                margin-bottom: 1rem;
-            }
-            
-            .nav-links {
-                width: 100%;
-                justify-content: space-around;
-            }
-            
-            .results-grid {
-                grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-            }
+        @media (max-width: 900px) {
+            .results-grid { grid-template-columns: 1fr; }
+            .search-section { flex-direction: column; align-items: stretch; }
+            .filter-row { flex-direction: column; }
         }
 
-        @media (max-width: 768px) {
-            h1 {
-                font-size: 1.8rem;
-            }
-            
-            .subtitle {
-                font-size: 1rem;
-            }
-            
-            .card {
-                padding: 1.2rem;
-            }
-            
-            .card-title {
-                font-size: 1.2rem;
-            }
-            
-            .result-stats {
-                flex-direction: column;
-                align-items: flex-start;
-                gap: 1rem;
-            }
-            
-            .result-actions {
-                width: 100%;
-                justify-content: space-between;
-            }
-            
-            .search-box input, 
-            .search-box select {
-                padding-left: 2.5rem;
-            }
-            
-            .search-box i.fa-search {
-                left: 1rem;
-            }
-        }
-
-        @media (max-width: 576px) {
-            .hero {
-                padding: 2rem 0;
-                border-radius: 0;
-            }
-            
-            .results-grid {
-                grid-template-columns: 1fr;
-            }
-            
-            .footer-content {
-                grid-template-columns: 1fr;
-            }
-            
-            .nav-links {
-                flex-direction: column;
-                gap: 0.5rem;
-                align-items: center;
-            }
-            
-            .nav-links a {
-                padding: 0.5rem 0;
-            }
+        @media (max-width: 600px) {
+            .navbar { flex-direction: column; gap: 0.5rem; padding: 0.7rem 2vw; }
+            .logo { font-size: 1.3rem; }
+            .container { padding: 8px 0.5vw 0 0.5vw; }
+            .hero { padding: 2rem 0 1.2rem 0; border-radius: 0; }
+            .card { padding: 1.1rem 1vw 0.7rem 1vw; }
+            .card-title { font-size: 1.1rem; }
+            .stats-overview span { font-size: 1rem; padding: 0.3rem 0.7rem; }
+            .result-item { padding: 1.1rem 0.5rem 0.7rem 0.5rem; }
         }
 
         /* 动画效果 */
@@ -716,6 +720,56 @@
         ::-webkit-scrollbar-thumb:hover {
             background: var(--primary-color);
         }
+
+        /* 高亮样式 */
+        .highlight {
+            background: #ffe066;
+            border-radius: 4px;
+            padding: 0 2px;
+        }
+        /* 骨架屏 */
+        .skeleton {
+            background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 37%, #f0f0f0 63%);
+            background-size: 400% 100%;
+            animation: skeleton-loading 1.4s ease infinite;
+            border-radius: 8px;
+            min-height: 24px;
+        }
+        @keyframes skeleton-loading {
+            0% { background-position: 100% 50%; }
+            100% { background-position: 0 50%; }
+        }
+        /* 模态弹窗 */
+        .modal {
+            position: fixed; left: 0; top: 0; width: 100vw; height: 100vh;
+            background: rgba(79,140,255,0.18); display: flex; align-items: center; justify-content: center; z-index: 2000;
+            animation: fadeIn 0.3s;
+        }
+        .modal-content {
+            background: #fff; border-radius: 18px; padding: 2.5rem 2rem; min-width: 340px; max-width: 95vw;
+            box-shadow: 0 8px 32px rgba(79,140,255,0.18);
+            position: relative;
+            font-size: 1.1rem;
+            color: var(--dark-color);
+            animation: fadeIn 0.3s;
+        }
+        .modal-close {
+            position: absolute; right: 1.2rem; top: 1.2rem; font-size: 2rem; cursor: pointer; color: #888;
+            transition: color 0.2s;
+        }
+        .modal-close:hover { color: var(--primary-color); }
+        /* 统计总览 */
+        .stats-overview {
+            display: flex; gap: 2rem; margin-bottom: 1rem; font-size: 1.1rem; color: #3f37c9;
+        }
+        .stats-overview span { background: #f0f4ff; border-radius: 20px; padding: 0.3rem 1rem; }
+        /* 按钮点击动画 */
+        .btn:active { transform: scale(0.96); }
+        .pagination { display:inline-block; margin-top:1.5rem; }
+        .page-btn { background:#fff; border:1px solid #4895ef; color:#4895ef; border-radius:6px; margin:0 2px; padding:0.4rem 1rem; cursor:pointer; font-size:1rem; transition:all 0.2s; }
+        .page-btn.active, .page-btn:hover { background:#4895ef; color:#fff; }
+        .page-btn[disabled] { opacity:0.5; cursor:not-allowed; }
+        .page-ellipsis { display:inline-block; width:2rem; color:#aaa; }
     </style>
 </head>
 <body>
@@ -723,14 +777,18 @@
     <nav class="navbar">
         <div class="logo">
             <i class="fas fa-dna"></i>
-            <span>代谢组学分析平台</span>
+            <span id="nav-title">代谢组学分析平台</span>
         </div>
         <div class="nav-links">
-            <a href="#"><i class="fas fa-home"></i> 首页</a>
-            <a href="#"><i class="fas fa-database"></i> 数据源</a>
-            <a href="#"><i class="fas fa-chart-bar"></i> 分析工具</a>
-            <a href="#"><i class="fas fa-book"></i> 文档</a>
-            <a href="#"><i class="fas fa-envelope"></i> 联系我们</a>
+            <a href="#" id="nav-home"><i class="fas fa-home"></i> 首页</a>
+            <a href="#" id="nav-data"><i class="fas fa-database"></i> 数据源</a>
+            <a href="#" id="nav-tools"><i class="fas fa-chart-bar"></i> 分析工具</a>
+            <a href="#" id="nav-doc"><i class="fas fa-book"></i> 文档</a>
+            <a href="#" id="nav-contact"><i class="fas fa-envelope"></i> 联系我们</a>
+        </div>
+        <div class="lang-switch" style="margin-left:2rem;">
+            <button id="lang-zh" class="btn btn-sm" style="margin-right:0.5rem;">中文</button>
+            <button id="lang-en" class="btn btn-outline btn-sm">English</button>
         </div>
     </nav>
 
@@ -759,8 +817,9 @@
                         <label for="search-id"><i class="fas fa-barcode"></i> 标识符</label>
                         <input type="text" id="search-id" placeholder="Mesh ID / HMDB ID...">
                     </div>
-                    <div style="align-self: flex-end;">
+                    <div style="align-self: flex-end; display:flex; gap:0.7rem;">
                         <button id="search-button" class="btn"><i class="fas fa-search"></i> 搜索</button>
+                        <button id="example-btn" class="btn btn-outline"><i class="fas fa-lightbulb"></i> 举例</button>
                     </div>
                 </div>
             </div>
@@ -827,6 +886,7 @@
                 <div class="chart-container" id="main-chart">
                     <!-- 图表将通过JavaScript渲染 -->
                 </div>
+                <div class="stats-overview" id="stats-overview"></div>
             </section>
 
             <!-- 结果统计 -->
@@ -849,6 +909,7 @@
                     <button class="btn"><i class="fas fa-random"></i> 查看随机示例</button>
                 </div>
             </div>
+            <div id="pagination-container" style="margin:2rem 0 1rem 0;text-align:center;"></div>
         </div>
     </main>
 
@@ -894,6 +955,9 @@
         let uniqueDiseases = [];
         let uniqueMetabolites = [];
         let currentResults = [];
+        let currentPage = 1;
+        const pageSize = 20;
+        let totalPages = 1;
         
         // DOM元素
         const searchInput = document.getElementById('search-input');
@@ -978,35 +1042,24 @@
         
         // 执行搜索
         function performSearch() {
+            showSkeleton();
             const searchTerm = searchInput.value.toLowerCase();
             const idTerm = searchId.value.toLowerCase();
             const selectedDisease = diseaseFilter.value;
             const selectedMetabolite = metaboliteFilter.value;
             const searchTypeValue = searchType.value;
             const sortByValue = sortBy.value;
-            
-            // 显示加载状态
-            resultsContainer.innerHTML = `
-                <div class="empty-state">
-                    <i class="fas fa-spinner spin"></i>
-                    <h3>正在搜索...</h3>
-                </div>
-            `;
-            
-            // 使用setTimeout让UI有机会更新
+            let filteredData = allData;
+            if (tagFilter && tagFilter !== '全部') {
+                filteredData = filteredData.filter(item => (item['Disease Name']||'').includes(tagFilter));
+            }
             setTimeout(() => {
-                let filteredData = allData;
-                
-                // 应用筛选器
                 if (selectedDisease) {
                     filteredData = filteredData.filter(item => item['Disease Name'] === selectedDisease);
                 }
-                
                 if (selectedMetabolite) {
                     filteredData = filteredData.filter(item => item['Metabolite Name'] === selectedMetabolite);
                 }
-                
-                // 应用搜索条件
                 if (searchTerm || idTerm) {
                     filteredData = filteredData.filter(item => {
                         const matchesSearchTerm = !searchTerm || 
@@ -1016,25 +1069,23 @@
                             )) ||
                             (searchTypeValue === 'disease' && item['Disease Name'] && item['Disease Name'].toLowerCase().includes(searchTerm)) ||
                             (searchTypeValue === 'metabolite' && item['Metabolite Name'] && item['Metabolite Name'].toLowerCase().includes(searchTerm));
-                        
                         const matchesIdTerm = !idTerm || 
                             (item['Mesh ID'] && item['Mesh ID'].toLowerCase().includes(idTerm)) ||
                             (item['Metabolite ID'] && item['Metabolite ID'].toLowerCase().includes(idTerm));
-                        
                         return matchesSearchTerm && matchesIdTerm;
                     });
                 }
-                
-                // 排序结果
                 filteredData = sortResults(filteredData, sortByValue);
-                
-                // 保存当前结果
                 currentResults = filteredData;
-                
-                // 显示结果
-                displayResults(filteredData);
+                // 分页
+                totalPages = Math.ceil(filteredData.length / pageSize) || 1;
+                if (currentPage > totalPages) currentPage = totalPages;
+                const pageData = filteredData.slice((currentPage-1)*pageSize, currentPage*pageSize);
+                displayResults(pageData);
+                updatePagination();
                 updateCharts(filteredData);
-            }, 100);
+                updateStatsOverview();
+            }, 400);
         }
         
         // 排序结果
@@ -1076,16 +1127,10 @@
                 const metaboliteName = highlightText(item['Metabolite Name'] || '未知代谢物', searchInput.value);
                 const meshId = highlightText(item['Mesh ID'] || '未知', searchId.value);
                 const hmdbId = highlightText(item['Metabolite ID'] || '未知', searchId.value);
-                
-                // 为图表生成随机数据（实际应用中应使用真实数据）
-                const randomValue = Math.floor(Math.random() * 100) + 1;
-                const randomTrend = Math.random() > 0.5 ? 'up' : 'down';
-                
                 html += `
                     <div class="result-item fade-in" style="animation-delay: ${index * 0.05}s">
                         <div class="result-header">
                             <h3 class="result-title"><i class="fas fa-disease"></i> ${diseaseName}</h3>
-                            <span class="result-badge">关联度: ${randomValue}%</span>
                         </div>
                         <div class="result-content">
                             <div class="result-row">
@@ -1100,17 +1145,9 @@
                                 <span class="result-label"><i class="fas fa-dna"></i> HMDB ID</span>
                                 <span class="result-value">${hmdbId}</span>
                             </div>
-                            <div class="result-row">
-                                <span class="result-label"><i class="fas fa-chart-line"></i> 趋势</span>
-                                <span class="result-value">
-                                    ${randomTrend === 'up' ? 
-                                        '<i class="fas fa-arrow-up" style="color: #4cc9f0;"></i> 上调' : 
-                                        '<i class="fas fa-arrow-down" style="color: #f72585;"></i> 下调'}
-                                </span>
-                            </div>
                         </div>
                         <div class="result-footer">
-                            <a href="#" class="result-link">查看详情 <i class="fas fa-chevron-right"></i></a>
+                            <a href="javascript:void(0)" class="result-link" onclick='showDetailModal(${JSON.stringify(item)})'>查看详情 <i class="fas fa-chevron-right"></i></a>
                             <span><i class="fas fa-calendar-alt"></i> ${new Date().toLocaleDateString()}</span>
                         </div>
                     </div>
@@ -1243,15 +1280,37 @@
         metaboliteFilter.addEventListener('change', performSearch);
         sortBy.addEventListener('change', performSearch);
         
-        // 标签云点击事件
+        // 高级筛选区重置按钮绑定
+        const filterResetBtn = document.querySelector('.card-actions .btn.btn-outline');
+        if (filterResetBtn) filterResetBtn.addEventListener('click', resetSearch);
+        
+        // 标签云点击事件，按标签筛选
+        let tagFilter = '';
         diseaseTags.addEventListener('click', function(e) {
             if (e.target.classList.contains('tag')) {
                 document.querySelectorAll('.tag').forEach(tag => {
                     tag.classList.remove('active');
                 });
                 e.target.classList.add('active');
-                // 这里可以添加根据标签筛选的逻辑
+                tagFilter = e.target.textContent.trim();
+                performSearch();
             }
+        });
+        
+        // 数据概览卡片导出按钮绑定，导出全部数据
+        const overviewExportBtn = document.querySelector('.card .card-actions .btn-outline');
+        if (overviewExportBtn) overviewExportBtn.addEventListener('click', function() {
+            if (!allData.length) return alert('没有可导出的数据');
+            const header = Object.keys(allData[0]);
+            const csv = [
+                header.join(','),
+                ...allData.map(row => header.map(h => `"${(row[h]||'').replace(/"/g,'""')}"`).join(','))
+            ].join('\n');
+            const blob = new Blob([csv], {type: 'text/csv'});
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url; a.download = 'all_data.csv'; a.click();
+            URL.revokeObjectURL(url);
         });
         
         // 初始化
@@ -1264,7 +1323,332 @@
                 searchInput.value = ['癌症', '糖尿病', '心脏病', '阿尔茨海默'][Math.floor(Math.random() * 4)];
                 performSearch();
             });
+
+            // 导出结果按钮
+            document.querySelector('.result-actions .btn-outline').addEventListener('click', exportResultsToCSV);
         });
+
+        // 统计总览
+        function updateStatsOverview() {
+            document.getElementById('stats-overview').innerHTML = `
+                <span>疾病数: <b>${uniqueDiseases.length}</b></span>
+                <span>代谢物数: <b>${uniqueMetabolites.length}</b></span>
+                <span>关联数: <b>${allData.length}</b></span>
+            `;
+        }
+
+        // 详情弹窗
+        function showDetailModal(item) {
+            const modal = document.createElement('div');
+            modal.className = 'modal';
+            modal.innerHTML = `
+                <div class="modal-content">
+                    <span class="modal-close" onclick="this.parentNode.parentNode.remove()">&times;</span>
+                    <h2>${item['Disease Name']} - ${item['Metabolite Name']}</h2>
+                    <p><b>Mesh ID:</b> ${item['Mesh ID'] || '未知'}</p>
+                    <p><b>HMDB ID:</b> ${item['Metabolite ID'] || '未知'}</p>
+                    <p><b>趋势:</b> ${item['Trend'] || '未知'}</p>
+                    <p><b>文献:</b> ${item['Reference'] || '无'}</p>
+                </div>
+            `;
+            // 点击遮罩关闭
+            modal.addEventListener('click', function(e) {
+                if (e.target === modal) modal.remove();
+            });
+            document.body.appendChild(modal);
+        }
+
+        // 导出CSV
+        function exportResultsToCSV() {
+            if (!currentResults.length) return alert('没有可导出的数据');
+            const header = Object.keys(currentResults[0]);
+            const csv = [
+                header.join(','),
+                ...currentResults.map(row => header.map(h => `"${(row[h]||'').replace(/"/g,'""')}"`).join(','))
+            ].join('\n');
+            const blob = new Blob([csv], {type: 'text/csv'});
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url; a.download = 'results.csv'; a.click();
+            URL.revokeObjectURL(url);
+        }
+
+        // 骨架屏
+        function showSkeleton(count = 6) {
+            let html = '';
+            for(let i=0;i<count;i++) {
+                html += `<div class="result-item skeleton" style="height:180px;margin-bottom:1.5rem;"></div>`;
+            }
+            resultsContainer.innerHTML = html;
+        }
+
+        // 分页控件渲染
+        function updatePagination() {
+            let html = '';
+            if (totalPages > 1) {
+                html += '<div class="pagination">';
+                html += `<button class="page-btn" ${currentPage===1?'disabled':''} onclick="gotoPage(${currentPage-1})">上一页</button>`;
+                // 页码显示（最多显示7个页码，前后省略号）
+                let start = Math.max(1, currentPage-3);
+                let end = Math.min(totalPages, currentPage+3);
+                if (start > 1) html += '<span class="page-ellipsis">...</span>';
+                for (let i = start; i <= end; i++) {
+                    html += `<button class="page-btn${i===currentPage?' active':''}" onclick="gotoPage(${i})">${i}</button>`;
+                }
+                if (end < totalPages) html += '<span class="page-ellipsis">...</span>';
+                html += `<button class="page-btn" ${currentPage===totalPages?'disabled':''} onclick="gotoPage(${currentPage+1})">下一页</button>`;
+                html += '</div>';
+            }
+            document.getElementById('pagination-container').innerHTML = html;
+        }
+
+        // 跳转页码
+        window.gotoPage = function(page) {
+            if (page < 1 || page > totalPages) return;
+            currentPage = page;
+            performSearch();
+        }
+
+        // 语言包
+        const i18n = {
+            zh: {
+                navTitle: '代谢组学分析平台',
+                navHome: '首页',
+                navData: '数据源',
+                navTools: '分析工具',
+                navDoc: '文档',
+                navContact: '联系我们',
+                heroTitle: '代谢物与疾病关联可视化分析',
+                heroSubtitle: '探索疾病与代谢物之间的复杂关系网络，发现潜在的生物标志物',
+                searchLabel: '关键词搜索',
+                searchPlaceholder: '输入疾病或代谢物名称...',
+                searchType: '搜索类型',
+                searchTypeAll: '全部类型',
+                searchTypeDisease: '仅疾病',
+                searchTypeMetabolite: '仅代谢物',
+                searchId: '标识符',
+                searchIdPlaceholder: 'Mesh ID / HMDB ID...',
+                searchBtn: '搜索',
+                filterTitle: '高级筛选',
+                filterReset: '重置',
+                filterDisease: '按疾病筛选',
+                filterMetabolite: '按代谢物筛选',
+                filterSort: '排序方式',
+                sortRelevance: '相关性',
+                sortDiseaseAsc: '疾病名称 (A-Z)',
+                sortDiseaseDesc: '疾病名称 (Z-A)',
+                sortMetaboliteAsc: '代谢物名称 (A-Z)',
+                sortMetaboliteDesc: '代谢物名称 (Z-A)',
+                tagAll: '全部',
+                tag1: '心血管疾病', tag2: '神经系统疾病', tag3: '代谢性疾病', tag4: '癌症', tag5: '遗传性疾病',
+                chartTitle: '数据概览',
+                chartExport: '导出',
+                statsDisease: '疾病数',
+                statsMetabolite: '代谢物数',
+                statsAssoc: '关联数',
+                resultReady: '准备搜索...',
+                resultFound: n => `找到 ${n} 条结果`,
+                resultNone: '没有找到匹配的结果',
+                resultNoneTip: '请尝试修改搜索条件或筛选条件',
+                resultReset: '重置搜索',
+                resultExport: '导出结果',
+                resultShare: '分享',
+                resultSeeExample: '查看随机示例',
+                resultDetail: '查看详情',
+                resultDate: () => new Date().toLocaleDateString(),
+                resultMesh: 'Mesh ID',
+                resultMetabolite: '代谢物',
+                resultHMDB: 'HMDB ID',
+                emptyStart: '开始您的探索之旅',
+                emptyTip: '输入搜索条件或使用筛选器来查找疾病与代谢物之间的关联关系',
+                errorTitle: '发生错误',
+                errorRetry: '重试',
+                footerAbout: '关于平台',
+                footerIntro: '平台简介',
+                footerDoc: '使用文档',
+                footerNews: '最新动态',
+                footerFAQ: '常见问题',
+                footerData: '数据资源',
+                footerSource: '数据来源',
+                footerSubmit: '数据提交',
+                footerStat: '统计分析',
+                footerNet: '网络分析',
+                footerContact: '联系我们',
+                footerEmail: '电子邮件',
+                footerPhone: '联系电话',
+                footerAddr: '实验室地址',
+                footerJoin: '加入我们',
+                footerCopyright: '2023 代谢组学分析平台 | 生物信息学研究中心 | 所有权利保留',
+                modalTrend: '趋势',
+                modalRef: '文献',
+                modalClose: '关闭',
+                pagePrev: '上一页',
+                pageNext: '下一页',
+            },
+            en: {
+                navTitle: 'Metabolomics Analysis Platform',
+                navHome: 'Home',
+                navData: 'Data',
+                navTools: 'Tools',
+                navDoc: 'Docs',
+                navContact: 'Contact',
+                heroTitle: 'Metabolite-Disease Association Visualization',
+                heroSubtitle: 'Explore the complex network between diseases and metabolites, discover potential biomarkers',
+                searchLabel: 'Keyword Search',
+                searchPlaceholder: 'Enter disease or metabolite name...',
+                searchType: 'Search Type',
+                searchTypeAll: 'All',
+                searchTypeDisease: 'Disease Only',
+                searchTypeMetabolite: 'Metabolite Only',
+                searchId: 'Identifier',
+                searchIdPlaceholder: 'Mesh ID / HMDB ID...',
+                searchBtn: 'Search',
+                filterTitle: 'Advanced Filter',
+                filterReset: 'Reset',
+                filterDisease: 'Filter by Disease',
+                filterMetabolite: 'Filter by Metabolite',
+                filterSort: 'Sort By',
+                sortRelevance: 'Relevance',
+                sortDiseaseAsc: 'Disease (A-Z)',
+                sortDiseaseDesc: 'Disease (Z-A)',
+                sortMetaboliteAsc: 'Metabolite (A-Z)',
+                sortMetaboliteDesc: 'Metabolite (Z-A)',
+                tagAll: 'All',
+                tag1: 'Cardiovascular', tag2: 'Neurological', tag3: 'Metabolic', tag4: 'Cancer', tag5: 'Genetic',
+                chartTitle: 'Data Overview',
+                chartExport: 'Export',
+                statsDisease: 'Diseases',
+                statsMetabolite: 'Metabolites',
+                statsAssoc: 'Associations',
+                resultReady: 'Ready to search...',
+                resultFound: n => `Found ${n} results`,
+                resultNone: 'No matching results',
+                resultNoneTip: 'Try changing your search or filter',
+                resultReset: 'Reset Search',
+                resultExport: 'Export',
+                resultShare: 'Share',
+                resultSeeExample: 'See Example',
+                resultDetail: 'Detail',
+                resultDate: () => new Date().toLocaleDateString(),
+                resultMesh: 'Mesh ID',
+                resultMetabolite: 'Metabolite',
+                resultHMDB: 'HMDB ID',
+                emptyStart: 'Start your exploration',
+                emptyTip: 'Enter search or use filters to find associations',
+                errorTitle: 'Error Occurred',
+                errorRetry: 'Retry',
+                footerAbout: 'About',
+                footerIntro: 'About',
+                footerDoc: 'Docs',
+                footerNews: 'News',
+                footerFAQ: 'FAQ',
+                footerData: 'Data',
+                footerSource: 'Source',
+                footerSubmit: 'Submit',
+                footerStat: 'Statistics',
+                footerNet: 'Network',
+                footerContact: 'Contact',
+                footerEmail: 'Email',
+                footerPhone: 'Phone',
+                footerAddr: 'Address',
+                footerJoin: 'Join Us',
+                footerCopyright: '2023 Metabolomics Platform | Bioinformatics Center | All rights reserved',
+                modalTrend: 'Trend',
+                modalRef: 'Reference',
+                modalClose: 'Close',
+                pagePrev: 'Prev',
+                pageNext: 'Next',
+            }
+        };
+        let lang = localStorage.getItem('lang') || 'zh';
+
+        function setLang(l) {
+            lang = l;
+            localStorage.setItem('lang', l);
+            const t = i18n[l];
+            // 顶部导航
+            document.getElementById('nav-title').textContent = t.navTitle;
+            document.getElementById('nav-home').innerHTML = '<i class="fas fa-home"></i> ' + t.navHome;
+            document.getElementById('nav-data').innerHTML = '<i class="fas fa-database"></i> ' + t.navData;
+            document.getElementById('nav-tools').innerHTML = '<i class="fas fa-chart-bar"></i> ' + t.navTools;
+            document.getElementById('nav-doc').innerHTML = '<i class="fas fa-book"></i> ' + t.navDoc;
+            document.getElementById('nav-contact').innerHTML = '<i class="fas fa-envelope"></i> ' + t.navContact;
+            // 英雄区
+            document.querySelector('.hero-content h1').textContent = t.heroTitle;
+            document.querySelector('.hero-content .subtitle').textContent = t.heroSubtitle;
+            document.querySelector('label[for="search-input"]').innerHTML = '<i class="fas fa-search"></i> ' + t.searchLabel;
+            document.getElementById('search-input').placeholder = t.searchPlaceholder;
+            document.querySelector('label[for="search-type"]').innerHTML = '<i class="fas fa-filter"></i> ' + t.searchType;
+            document.getElementById('search-type').options[0].text = t.searchTypeAll;
+            document.getElementById('search-type').options[1].text = t.searchTypeDisease;
+            document.getElementById('search-type').options[2].text = t.searchTypeMetabolite;
+            document.querySelector('label[for="search-id"]').innerHTML = '<i class="fas fa-barcode"></i> ' + t.searchId;
+            document.getElementById('search-id').placeholder = t.searchIdPlaceholder;
+            document.getElementById('search-button').innerHTML = '<i class="fas fa-search"></i> ' + t.searchBtn;
+            document.getElementById('example-btn').innerHTML = '<i class="fas fa-lightbulb"></i> ' + (lang==='zh'?'举例':'Example');
+            // 筛选卡片
+            document.querySelector('.card-title').innerHTML = '<i class="fas fa-sliders-h"></i> ' + t.filterTitle;
+            document.querySelector('.card-actions .btn-outline').innerHTML = '<i class="fas fa-sync-alt"></i> ' + t.filterReset;
+            document.querySelector('label[for="disease-filter"]').innerHTML = '<i class="fas fa-disease"></i> ' + t.filterDisease;
+            document.querySelector('label[for="metabolite-filter"]').innerHTML = '<i class="fas fa-atom"></i> ' + t.filterMetabolite;
+            document.querySelector('label[for="sort-by"]').innerHTML = '<i class="fas fa-sort"></i> ' + t.filterSort;
+            document.getElementById('sort-by').options[0].text = t.sortRelevance;
+            document.getElementById('sort-by').options[1].text = t.sortDiseaseAsc;
+            document.getElementById('sort-by').options[2].text = t.sortDiseaseDesc;
+            document.getElementById('sort-by').options[3].text = t.sortMetaboliteAsc;
+            document.getElementById('sort-by').options[4].text = t.sortMetaboliteDesc;
+            // 标签云
+            const tags = document.querySelectorAll('#disease-tags .tag');
+            if (tags.length >= 6) {
+                tags[0].textContent = t.tagAll;
+                tags[1].textContent = t.tag1;
+                tags[2].textContent = t.tag2;
+                tags[3].textContent = t.tag3;
+                tags[4].textContent = t.tag4;
+                tags[5].textContent = t.tag5;
+            }
+            // 图表卡片
+            document.querySelectorAll('.card-title')[1].innerHTML = '<i class="fas fa-chart-pie"></i> ' + t.chartTitle;
+            document.querySelectorAll('.card-actions .btn-outline')[1].innerHTML = '<i class="fas fa-download"></i> ' + t.chartExport;
+            // 统计总览
+            updateStatsOverview();
+            // 页脚
+            document.querySelectorAll('.footer-column h3')[0].textContent = t.footerAbout;
+            document.querySelectorAll('.footer-links li a')[0].innerHTML = '<i class="fas fa-info-circle"></i> ' + t.footerIntro;
+            document.querySelectorAll('.footer-links li a')[1].innerHTML = '<i class="fas fa-book"></i> ' + t.footerDoc;
+            document.querySelectorAll('.footer-links li a')[2].innerHTML = '<i class="fas fa-newspaper"></i> ' + t.footerNews;
+            document.querySelectorAll('.footer-links li a')[3].innerHTML = '<i class="fas fa-question-circle"></i> ' + t.footerFAQ;
+            document.querySelectorAll('.footer-column h3')[1].textContent = t.footerData;
+            document.querySelectorAll('.footer-links li a')[4].innerHTML = '<i class="fas fa-database"></i> ' + t.footerSource;
+            document.querySelectorAll('.footer-links li a')[5].innerHTML = '<i class="fas fa-upload"></i> ' + t.footerSubmit;
+            document.querySelectorAll('.footer-links li a')[6].innerHTML = '<i class="fas fa-chart-line"></i> ' + t.footerStat;
+            document.querySelectorAll('.footer-links li a')[7].innerHTML = '<i class="fas fa-project-diagram"></i> ' + t.footerNet;
+            document.querySelectorAll('.footer-column h3')[2].textContent = t.footerContact;
+            document.querySelectorAll('.footer-links li a')[8].innerHTML = '<i class="fas fa-envelope"></i> ' + t.footerEmail;
+            document.querySelectorAll('.footer-links li a')[9].innerHTML = '<i class="fas fa-phone"></i> ' + t.footerPhone;
+            document.querySelectorAll('.footer-links li a')[10].innerHTML = '<i class="fas fa-map-marker-alt"></i> ' + t.footerAddr;
+            document.querySelectorAll('.footer-links li a')[11].innerHTML = '<i class="fas fa-user-plus"></i> ' + t.footerJoin;
+            document.querySelector('.footer-bottom p').textContent = t.footerCopyright;
+            // 语言按钮样式
+            document.getElementById('lang-zh').className = l==='zh' ? 'btn btn-sm' : 'btn btn-outline btn-sm';
+            document.getElementById('lang-en').className = l==='en' ? 'btn btn-sm' : 'btn btn-outline btn-sm';
+            // 结果区、空状态、错误等动态内容在各自函数中切换
+        }
+
+        document.getElementById('lang-zh').onclick = function(){ setLang('zh'); performSearch(); };
+        document.getElementById('lang-en').onclick = function(){ setLang('en'); performSearch(); };
+
+        document.getElementById('example-btn').onclick = function() {
+            // 只从已加载的疾病和代谢物中随机选一个
+            if (!allData.length) return;
+            const diseases = uniqueDiseases;
+            const metabolites = uniqueMetabolites;
+            const pool = [...diseases, ...metabolites];
+            if (pool.length === 0) return;
+            const example = pool[Math.floor(Math.random()*pool.length)];
+            searchInput.value = example;
+            performSearch();
+        };
     </script>
 </body>
 </html>
