@@ -3,698 +3,618 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>代谢物与疾病关联可视化分析平台</title>
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
+    <title>Disease-Metabolite Association Database Query System | Disease-Metabolite Association Database</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://unpkg.com/vis-network/styles/vis-network.min.css" rel="stylesheet" />
+    <script src="https://unpkg.com/vis-network/standalone/umd/vis-network.min.js"></script>
     <style>
-        :root {
-            --primary-color: #4f8cff;
-            --secondary-color: #6c47ff;
-            --accent-color: #00c9a7;
-            --light-color: #f7faff;
-            --dark-color: #232946;
-            --success-color: #43e97b;
-            --warning-color: #ffb86b;
-            --info-color: #3a86ff;
-            --border-radius: 18px;
-            --box-shadow: 0 6px 32px rgba(79,140,255,0.08);
-            --transition: all 0.25s cubic-bezier(0.4,0,0.2,1);
-        }
-
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
 
+        :root {
+            /* 主色调 - 深蓝科技风 */
+            --primary-900: #0f172a;
+            --primary-800: #1e293b;
+            --primary-700: #334155;
+            --primary-600: #475569;
+            --primary-500: #64748b;
+            --primary-400: #94a3b8;
+            --primary-300: #cbd5e1;
+            --primary-200: #e2e8f0;
+            --primary-100: #f1f5f9;
+            --primary-50: #f8fafc;
+
+            /* 强调色 - 科技蓝 */
+            --accent-600: #2563eb;
+            --accent-500: #3b82f6;
+            --accent-400: #60a5fa;
+            --accent-300: #93c5fd;
+            --accent-200: #bfdbfe;
+            --accent-100: #dbeafe;
+            --accent-50: #eff6ff;
+
+            /* 功能色 */
+            --success-500: #10b981;
+            --success-400: #34d399;
+            --warning-500: #f59e0b;
+            --warning-400: #fbbf24;
+            --error-500: #ef4444;
+            --error-400: #f87171;
+
+            /* 文本色 */
+            --text-900: #0f172a;
+            --text-800: #1e293b;
+            --text-700: #334155;
+            --text-600: #475569;
+            --text-500: #64748b;
+            --text-400: #94a3b8;
+            --text-300: #cbd5e1;
+            --text-200: #e2e8f0;
+            --text-100: #f1f5f9;
+            --text-50: #f8fafc;
+
+            /* 阴影 */
+            --shadow-xs: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+            --shadow-sm: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+            --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+            --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+            --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+            --shadow-2xl: 0 25px 50px -12px rgb(0 0 0 / 0.25);
+
+            /* 圆角 */
+            --radius-sm: 0.375rem;
+            --radius-md: 0.5rem;
+            --radius-lg: 0.75rem;
+            --radius-xl: 1rem;
+            --radius-2xl: 1.5rem;
+
+            /* 动画 */
+            --transition-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
+            --transition-normal: 300ms cubic-bezier(0.4, 0, 0.2, 1);
+            --transition-slow: 500ms cubic-bezier(0.4, 0, 0.2, 1);
+
+            /* 间距 */
+            --space-1: 0.25rem;
+            --space-2: 0.5rem;
+            --space-3: 0.75rem;
+            --space-4: 1rem;
+            --space-5: 1.25rem;
+            --space-6: 1.5rem;
+            --space-8: 2rem;
+            --space-10: 2.5rem;
+            --space-12: 3rem;
+            --space-16: 4rem;
+            --space-20: 5rem;
+        }
+
         body {
-            font-family: 'Noto Sans SC', 'Segoe UI', Arial, sans-serif;
-            background: linear-gradient(135deg, #f7faff 0%, #e3e8ff 100%);
-            color: var(--dark-color);
+            font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh;
-            margin: 0;
-            padding: 0;
-            display: flex;
-            flex-direction: column;
+            color: var(--text-800);
+            line-height: 1.7;
+            font-weight: 400;
         }
 
         .container {
             max-width: 1400px;
             margin: 0 auto;
-            padding: 32px 2vw 0 2vw;
-            flex: 1;
+            background: var(--primary-50);
+            border-radius: var(--radius-2xl);
+            box-shadow: var(--shadow-2xl);
+            overflow: hidden;
+            margin-top: var(--space-6);
+            margin-bottom: var(--space-6);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
         }
 
-        /* 导航栏样式 */
-        .navbar {
-            background: linear-gradient(90deg, rgba(79,140,255,0.95) 0%, rgba(108,71,255,0.95) 100%);
-            color: #fff;
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-            box-shadow: 0 2px 16px rgba(79,140,255,0.08);
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 0.7rem 3vw;
-            backdrop-filter: blur(8px);
-        }
-
-        .logo {
-            display: flex;
-            align-items: center;
-            font-size: 2rem;
-            font-weight: 800;
-            letter-spacing: 1px;
-            gap: 0.7rem;
-        }
-
-        .logo i {
-            font-size: 2.2rem;
-            color: var(--accent-color);
-        }
-
-        .nav-links {
-            display: flex;
-            gap: 2.2rem;
-        }
-
-        .nav-links a {
-            color: #fff;
-            text-decoration: none;
-            font-weight: 500;
-            font-size: 1.1rem;
-            padding: 0.3rem 0.7rem;
-            border-radius: 8px;
-            transition: var(--transition);
-        }
-
-        .nav-links a:hover {
-            background: rgba(255,255,255,0.12);
-            color: var(--accent-color);
-        }
-
-        .lang-switch {
-            display: flex;
-            align-items: center;
-            gap: 0.2rem;
-        }
-
-        .lang-switch .btn {
-            min-width: 60px;
-            font-size: 1rem;
-            border-radius: 8px;
-            padding: 0.3rem 0.8rem;
-        }
-
-        /* 主标题区域 */
-        .hero {
-            background: linear-gradient(120deg, #4f8cff 0%, #6c47ff 100%);
-            color: #fff;
-            border-radius: var(--border-radius);
-            box-shadow: var(--box-shadow);
-            margin-bottom: 2.5rem;
-            padding: 3.5rem 0 2.5rem 0;
+        .header {
+            background: linear-gradient(135deg, var(--primary-900) 0%, var(--primary-800) 50%, var(--primary-700) 100%);
+            color: white;
+            padding: var(--space-16) var(--space-10);
+            text-align: center;
             position: relative;
             overflow: hidden;
-            text-align: center;
         }
 
-        .hero::before {
+        .header::before {
             content: '';
             position: absolute;
-            left: 0; right: 0; top: 0; bottom: 0;
-            background: url('data:image/svg+xml;utf8,<svg width="100%" height="100%" viewBox="0 0 1440 320" fill="none" xmlns="http://www.w3.org/2000/svg"><path fill="%23fff" fill-opacity="0.08" d="M0,160L60,170.7C120,181,240,203,360,197.3C480,192,600,160,720,133.3C840,107,960,85,1080,101.3C1200,117,1320,171,1380,197.3L1440,224L1440,0L1380,0C1320,0,1200,0,1080,0C960,0,840,0,720,0C600,0,480,0,360,0C240,0,120,0,60,0L0,0Z"></path></svg>');
-            background-size: cover;
-            z-index: 0;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                radial-gradient(circle at 20% 80%, rgba(59, 130, 246, 0.15) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(16, 185, 129, 0.15) 0%, transparent 50%),
+                radial-gradient(circle at 40% 40%, rgba(245, 158, 11, 0.1) 0%, transparent 50%);
+            animation: float 20s ease-in-out infinite;
         }
 
-        .hero-content {
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            33% { transform: translateY(-20px) rotate(1deg); }
+            66% { transform: translateY(10px) rotate(-1deg); }
+        }
+
+        .header-content {
             position: relative;
             z-index: 1;
+        }
+
+        .header h1 {
+            font-size: 3.5rem;
+            margin-bottom: var(--space-4);
+            font-weight: 800;
+            letter-spacing: -0.025em;
+            background: linear-gradient(135deg, #ffffff 0%, var(--accent-200) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            line-height: 1.1;
+        }
+
+        .header .subtitle {
+            font-size: 1.25rem;
+            margin-bottom: var(--space-6);
+            font-weight: 400;
+            color: var(--text-200);
+            letter-spacing: 0.025em;
+        }
+
+        .header .description {
+            font-size: 1.125rem;
+            color: var(--text-300);
+            max-width: 700px;
+            margin: 0 auto var(--space-8);
+            line-height: 1.7;
+            font-weight: 300;
+        }
+
+        .stats-bar {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: var(--space-6);
             max-width: 800px;
             margin: 0 auto;
-            padding: 0 20px;
         }
 
-        .hero-content h1 {
-            font-size: 3rem;
-            font-weight: 900;
-            margin-bottom: 1.2rem;
-            letter-spacing: 1px;
-        }
-
-        .hero-content .subtitle {
-            font-size: 1.3rem;
-            font-weight: 400;
-            opacity: 0.95;
-            margin-bottom: 2.2rem;
-        }
-
-        /* 卡片样式 */
-        .card {
-            background: #fff;
-            border-radius: var(--border-radius);
-            box-shadow: var(--box-shadow);
-            padding: 2.2rem 2vw 1.5rem 2vw;
-            margin-bottom: 2.2rem;
-            position: relative;
-            overflow: visible;
-        }
-
-        .card-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 1.2rem;
-            padding-bottom: 0.7rem;
-            border-bottom: 1.5px solid #f0f4ff;
-        }
-
-        .card-title {
-            font-size: 1.5rem;
-            color: var(--primary-color);
-            font-weight: 800;
-            display: flex;
-            align-items: center;
-            gap: 0.7rem;
-        }
-
-        .card-actions {
-            display: flex;
-            gap: 1rem;
-        }
-
-        /* 按钮样式 */
-        .btn {
-            background: linear-gradient(90deg, var(--primary-color), var(--accent-color));
-            color: #fff;
-            border: none;
-            padding: 0.7rem 1.7rem;
-            border-radius: 12px;
-            cursor: pointer;
-            font-size: 1.05rem;
-            font-weight: 600;
-            transition: var(--transition);
-            box-shadow: 0 2px 8px rgba(79,140,255,0.10);
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .btn:hover {
-            background: linear-gradient(90deg, var(--accent-color), var(--primary-color));
-            color: #fff;
-            transform: translateY(-2px) scale(1.04);
-        }
-
-        .btn-outline {
-            background: #fff;
-            border: 2px solid var(--primary-color);
-            color: var(--primary-color);
-            box-shadow: none;
-        }
-
-        .btn-outline:hover {
-            background: var(--primary-color);
-            color: #fff;
-        }
-
-        .btn-sm {
-            padding: 0.4rem 1.1rem;
-            font-size: 0.98rem;
-            border-radius: 8px;
-        }
-
-        /* 搜索区域 */
-        .search-section {
-            background: #fff;
-            border-radius: 16px;
-            box-shadow: 0 2px 16px rgba(79,140,255,0.10);
-            padding: 2rem 2vw 1.2rem 2vw;
-            margin: 0 auto 1.5rem auto;
-            display: flex;
-            flex-wrap: wrap;
-            gap: 1.5rem;
-            justify-content: center;
-            align-items: flex-end;
-            max-width: 900px;
-            position: relative;
-            z-index: 2;
-        }
-
-        .search-box {
-            flex: 1 1 220px;
-            min-width: 220px;
-            max-width: 320px;
-            position: relative;
-        }
-
-        .search-box label {
-            font-weight: 600;
-            color: var(--primary-color);
-            margin-bottom: 0.5rem;
-            display: flex;
-            align-items: center;
-            font-size: 1.05rem;
-        }
-
-        .search-box input, .search-box select {
-            width: 100%;
-            padding: 0.8rem 1.2rem 0.8rem 2.5rem;
-            border: 1.5px solid #e0e6f7;
-            border-radius: 12px;
-            font-size: 1.05rem;
-            background: #f7faff;
-            transition: var(--transition);
-            margin-bottom: 0.2rem;
-        }
-
-        .search-box input:focus, .search-box select:focus {
-            border-color: var(--primary-color);
-            background: #fff;
-            outline: none;
-        }
-
-        .search-box i.fa-search {
-            position: absolute;
-            left: 1rem;
-            top: 2.2rem;
-            color: #b0b8d1;
-            font-size: 1.1rem;
-        }
-
-        #search-button {
-            margin-top: 0.5rem;
-            font-size: 1.1rem;
-            padding: 0.7rem 2.2rem;
-            border-radius: 12px;
-            background: linear-gradient(90deg, var(--primary-color), var(--accent-color));
-            box-shadow: 0 2px 8px rgba(79,140,255,0.10);
-            font-weight: 700;
-        }
-
-        #search-button:hover {
-            background: linear-gradient(90deg, var(--accent-color), var(--primary-color));
-        }
-
-        /* 筛选区域 */
-        .filter-section {
-            margin-bottom: 1.2rem;
-        }
-
-        .filter-row {
-            display: flex;
-            flex-wrap: nowrap;
-            gap: 1.2rem;
-            margin-bottom: 1rem;
-        }
-
-        .filter-group {
-            flex: 1 1 0;
-            min-width: 0;
-            max-width: 100%;
-            display: flex;
-            flex-direction: column;
-            justify-content: flex-end;
-        }
-
-        .filter-group label {
-            margin-bottom: 0.5rem;
-            font-size: 1.05rem;
-            font-weight: 600;
-            color: var(--primary-color);
-        }
-
-        .filter-group select,
-        .filter-group input {
-            height: 48px;
-            min-height: 48px;
-            max-height: 48px;
-            box-sizing: border-box;
-        }
-
-        /* 美化高级筛选下拉框 */
-        .filter-group select {
-            appearance: none;
-            -webkit-appearance: none;
-            -moz-appearance: none;
-            background: #f7faff url('data:image/svg+xml;utf8,<svg fill="%234f8cff" height="20" viewBox="0 0 20 20" width="20" xmlns="http://www.w3.org/2000/svg"><path d="M7.293 7.293a1 1 0 011.414 0L10 8.586l1.293-1.293a1 1 0 111.414 1.414l-2 2a1 1 0 01-1.414 0l-2-2a1 1 0 010-1.414z"/></svg>') no-repeat right 1.2rem center/1.2em 1.2em;
-            border: 1.5px solid #e0e6f7;
-            border-radius: 12px;
-            padding: 0.8rem 2.5rem 0.8rem 1.2rem;
-            font-size: 1.05rem;
-            color: var(--dark-color);
-            font-family: inherit;
-            box-shadow: 0 1px 4px rgba(79,140,255,0.06);
-            transition: border-color 0.2s, box-shadow 0.2s;
-            cursor: pointer;
-        }
-        .filter-group select:focus {
-            border-color: var(--primary-color);
-            background-color: #fff;
-            box-shadow: 0 2px 8px rgba(79,140,255,0.12);
-            outline: none;
-        }
-        .filter-group select option {
-            color: var(--dark-color);
-            background: #fff;
-            font-size: 1.05rem;
-        }
-        @media (max-width: 600px) {
-            .filter-group select {
-                font-size: 1.15rem;
-                padding: 1rem 2.5rem 1rem 1.2rem;
-            }
-        }
-
-        @media (max-width: 900px) {
-            .filter-row {
-                flex-direction: column;
-                gap: 0.7rem;
-            }
-            .filter-group {
-                width: 100%;
-                min-width: 0;
-                max-width: 100%;
-            }
-        }
-
-        /* 结果统计 */
-        .result-stats {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 1.5rem;
-            padding: 1.2rem 1vw;
-            background: #f7faff;
-            border-radius: var(--border-radius);
-            box-shadow: 0 1px 8px rgba(79,140,255,0.06);
-        }
-
-        .result-count {
-            font-weight: 700;
-            color: var(--primary-color);
-            font-size: 1.1rem;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        .result-actions {
-            display: flex;
-            gap: 1.2rem;
-        }
-
-        /* 结果列表 */
-        .results-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(370px, 1fr));
-            gap: 2rem;
-        }
-
-        .result-item {
-            background: #fff;
-            border-radius: var(--border-radius);
-            box-shadow: 0 2px 16px rgba(79,140,255,0.10);
-            padding: 1.7rem 1.2rem 1.2rem 1.2rem;
-            transition: var(--transition);
-            border-top: 5px solid var(--accent-color);
-            display: flex;
-            flex-direction: column;
-            min-height: 180px;
-            position: relative;
-        }
-
-        .result-item:hover {
-            transform: translateY(-7px) scale(1.02);
-            box-shadow: 0 8px 32px rgba(79,140,255,0.16);
-            border-top: 5px solid var(--primary-color);
-        }
-
-        .result-header {
-            display: flex;
-            justify-content: flex-start;
-            align-items: center;
-            margin-bottom: 1rem;
-            gap: 1rem;
-        }
-
-        .result-title {
-            font-size: 1.25rem;
-            color: var(--primary-color);
-            font-weight: 800;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        .result-content {
-            flex: 1;
-            margin-bottom: 0.7rem;
-        }
-
-        .result-row {
-            display: flex;
-            margin-bottom: 0.7rem;
-            align-items: flex-start;
-            gap: 0.7rem;
-        }
-
-        .result-label {
-            font-weight: 600;
-            color: #6c47ff;
-            min-width: 110px;
-            display: flex;
-            align-items: center;
-            gap: 0.3rem;
-        }
-
-        .result-value {
-            flex: 1;
-            word-break: break-word;
-            color: var(--dark-color);
-            font-weight: 500;
-        }
-
-        .result-footer {
-            margin-top: 0.7rem;
-            padding-top: 0.7rem;
-            border-top: 1px solid #f0f4ff;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            font-size: 0.98rem;
-            color: #888;
-        }
-
-        .result-link {
-            color: var(--primary-color);
-            text-decoration: none;
-            font-weight: 700;
-            display: flex;
-            align-items: center;
-            gap: 0.3rem;
-            transition: var(--transition);
-        }
-
-        .result-link:hover {
-            color: var(--accent-color);
-            transform: translateX(3px);
-        }
-
-        /* 图表容器 */
-        .chart-container {
-            height: 340px;
-            margin-top: 1.5rem;
-            position: relative;
-        }
-
-        /* 空状态 */
-        .empty-state {
+        .stat-item {
             text-align: center;
-            padding: 3rem 2rem;
-            background: #fff;
-            border-radius: var(--border-radius);
-            box-shadow: var(--box-shadow);
-            color: var(--primary-color);
+            padding: var(--space-6) var(--space-4);
+            background: rgba(255, 255, 255, 0.08);
+            border-radius: var(--radius-xl);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: var(--transition-normal);
+            position: relative;
+            overflow: hidden;
         }
 
-        .empty-state i {
-            font-size: 3rem;
-            color: var(--warning-color);
-            margin-bottom: 1.5rem;
-            opacity: 0.7;
+        .stat-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+            transition: var(--transition-slow);
         }
 
-        .empty-state h3 {
-            font-size: 1.7rem;
-            margin-bottom: 1rem;
-            color: var(--primary-color);
+        .stat-item:hover::before {
+            left: 100%;
         }
 
-        .empty-state p {
-            color: #666;
-            margin-bottom: 1.5rem;
-            max-width: 500px;
-            margin-left: auto;
-            margin-right: auto;
+        .stat-item:hover {
+            transform: translateY(-4px);
+            background: rgba(255, 255, 255, 0.12);
+            box-shadow: var(--shadow-lg);
         }
 
-        /* 标签云 */
-        .tag-cloud {
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: 800;
+            display: block;
+            margin-bottom: var(--space-2);
+            background: linear-gradient(135deg, var(--accent-400), var(--accent-300));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .stat-label {
+            font-size: 0.875rem;
+            color: var(--text-300);
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .search-section {
+            padding: var(--space-16) var(--space-10);
+            background: var(--primary-100);
+            position: relative;
+        }
+
+        .search-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--accent-500), var(--success-500), var(--warning-500));
+        }
+
+        .search-tabs {
             display: flex;
-            flex-wrap: wrap;
-            gap: 0.7rem;
-            margin-top: 1.2rem;
+            margin-bottom: var(--space-10);
+            border-radius: var(--radius-xl);
+            overflow: hidden;
+            box-shadow: var(--shadow-lg);
+            background: white;
+            border: 1px solid var(--primary-200);
         }
 
-        .tag {
-            background: #e3e8ff;
-            color: var(--primary-color);
-            padding: 0.5rem 1.2rem;
-            border-radius: 50px;
+        .tab {
+            flex: 1;
+            padding: var(--space-5) var(--space-6);
+            background: white;
+            border: none;
+            cursor: pointer;
             font-size: 1rem;
             font-weight: 600;
-            transition: var(--transition);
-            cursor: pointer;
-            box-shadow: 0 1px 4px rgba(79,140,255,0.07);
-        }
-
-        .tag:hover, .tag.active {
-            background: linear-gradient(90deg, var(--primary-color), var(--accent-color));
-            color: #fff;
-            transform: translateY(-2px) scale(1.06);
-        }
-
-        /* 统计总览 */
-        .stats-overview {
-            display: flex;
-            gap: 2.5rem;
-            margin-bottom: 1.2rem;
-            font-size: 1.2rem;
-            color: var(--primary-color);
-            font-weight: 700;
-        }
-
-        .stats-overview span {
-            background: #f0f4ff;
-            border-radius: 20px;
-            padding: 0.5rem 1.5rem;
-            font-size: 1.3rem;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        /* 页脚 */
-        footer {
-            background-color: var(--dark-color);
-            color: white;
-            padding: 2rem 0;
-            margin-top: 3rem;
-        }
-
-        .footer-links a:hover {
-            color: white !important;
-            transform: translateX(5px);
-        }
-
-        .footer-content {
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: 0 20px;
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 2rem;
-        }
-
-        .footer-column h3 {
-            font-size: 1.2rem;
-            margin-bottom: 1.5rem;
-            color: #fff;
+            transition: var(--transition-normal);
+            color: var(--text-600);
             position: relative;
-            padding-bottom: 0.8rem;
+            font-family: 'Poppins', sans-serif;
         }
 
-        .footer-column h3::after {
-            content: "";
-            position: absolute;
-            left: 0;
-            bottom: 0;
-            width: 50px;
-            height: 3px;
-            background-color: var(--accent-color);
+        .tab.active {
+            background: linear-gradient(135deg, var(--accent-500), var(--accent-600));
+            color: white;
+            box-shadow: var(--shadow-md);
         }
 
-        .footer-links {
-            list-style: none;
+        .tab:hover:not(.active) {
+            background: var(--primary-50);
+            color: var(--text-800);
         }
 
-        .footer-links li {
-            margin-bottom: 0.8rem;
+        .tab i {
+            margin-right: var(--space-2);
+            font-size: 1.1rem;
         }
 
-        .footer-links a {
-            color: #aaa;
-            text-decoration: none;
-            transition: var(--transition);
+        .search-form {
+            display: none;
+            animation: slideUp 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .search-form.active {
+            display: block;
+        }
+
+        @keyframes slideUp {
+            from { 
+                opacity: 0; 
+                transform: translateY(20px); 
+            }
+            to { 
+                opacity: 1; 
+                transform: translateY(0); 
+            }
+        }
+
+        .search-input-container {
+            position: relative;
+            flex: 1;
+        }
+
+        .search-input-group {
+            display: flex;
+            gap: var(--space-4);
+            margin-bottom: var(--space-6);
+            align-items: stretch;
+        }
+
+        .search-select {
+            padding: var(--space-4) var(--space-5);
+            border: 2px solid var(--primary-200);
+            border-radius: var(--radius-lg);
+            font-size: 0.95rem;
+            background: white;
+            cursor: pointer;
+            transition: var(--transition-normal);
+            min-width: 160px;
+            font-weight: 500;
+            color: var(--text-700);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .search-select:focus {
+            outline: none;
+            border-color: var(--accent-500);
+            box-shadow: 0 0 0 3px var(--accent-100);
+        }
+
+        .search-select:hover {
+            border-color: var(--primary-300);
+        }
+
+        .search-input {
+            flex: 1;
+            padding: var(--space-4) var(--space-5);
+            border: 2px solid var(--primary-200);
+            border-radius: var(--radius-lg);
+            font-size: 0.95rem;
+            transition: var(--transition-normal);
+            background: white;
+            color: var(--text-700);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: var(--accent-500);
+            box-shadow: 0 0 0 3px var(--accent-100);
+        }
+
+        .search-input:hover {
+            border-color: var(--primary-300);
+        }
+
+        .search-input::placeholder {
+            color: var(--text-400);
+        }
+
+        .search-button {
+            padding: var(--space-4) var(--space-8);
+            background: linear-gradient(135deg, var(--accent-500), var(--accent-600));
+            color: white;
+            border: none;
+            border-radius: var(--radius-lg);
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition-normal);
             display: flex;
             align-items: center;
+            gap: var(--space-2);
+            min-width: 140px;
+            justify-content: center;
+            box-shadow: var(--shadow-md);
+            font-family: 'Poppins', sans-serif;
         }
 
-        .footer-links a:hover {
+        .search-button:hover {
+            background: linear-gradient(135deg, var(--accent-600), var(--accent-500));
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .search-button:active {
+            transform: translateY(0);
+        }
+
+        .search-actions {
+            margin-bottom: var(--space-6);
+            display: flex;
+            gap: var(--space-3);
+        }
+
+        .secondary-button {
+            padding: var(--space-3) var(--space-5);
+            background: white;
+            color: var(--text-700);
+            border: 2px solid var(--primary-200);
+            border-radius: var(--radius-lg);
+            font-size: 0.875rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition-normal);
+            display: flex;
+            align-items: center;
+            gap: var(--space-2);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .secondary-button:hover {
+            background: var(--primary-50);
+            border-color: var(--accent-500);
+            color: var(--accent-600);
+            transform: translateY(-1px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .search-examples {
+            margin-top: var(--space-6);
+            padding: var(--space-6);
+            background: white;
+            border-radius: var(--radius-xl);
+            border-left: 4px solid var(--accent-500);
+            box-shadow: var(--shadow-md);
+            border: 1px solid var(--primary-200);
+        }
+
+        .search-examples h4 {
+            color: var(--text-800);
+            margin-bottom: var(--space-4);
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: var(--space-2);
+            font-size: 1.1rem;
+        }
+
+        .example-item {
+            margin: var(--space-2) 0;
+            color: var(--text-600);
+            padding: var(--space-2) 0;
+            border-bottom: 1px solid var(--primary-100);
+            font-size: 0.95rem;
+        }
+
+        .example-item:last-child {
+            border-bottom: none;
+        }
+
+        .example-item strong {
+            color: var(--text-800);
+            font-weight: 600;
+        }
+
+        .results-section {
+            padding: var(--space-16) var(--space-10);
+            background: white;
+            min-height: 400px;
+        }
+
+        .results-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: var(--space-8);
+            padding-bottom: var(--space-5);
+            border-bottom: 2px solid var(--primary-200);
+        }
+
+        .results-title {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--text-800);
+            display: flex;
+            align-items: center;
+            gap: var(--space-3);
+        }
+
+        .results-count {
+            font-size: 1.125rem;
+            color: var(--text-600);
+            font-weight: 500;
+            background: var(--primary-100);
+            padding: var(--space-2) var(--space-4);
+            border-radius: var(--radius-lg);
+        }
+
+        .export-button {
+            padding: var(--space-3) var(--space-6);
+            background: linear-gradient(135deg, var(--success-500), var(--success-400));
             color: white;
-            transform: translateX(5px);
+            border: none;
+            border-radius: var(--radius-lg);
+            font-size: 0.875rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition-normal);
+            display: flex;
+            align-items: center;
+            gap: var(--space-2);
+            box-shadow: var(--shadow-md);
         }
 
-        .footer-links a i {
-            margin-right: 0.6rem;
-            width: 16px;
+        .export-button:hover {
+            background: linear-gradient(135deg, var(--success-400), var(--success-500));
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
         }
 
-        .footer-bottom {
+        .results-table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+            border-radius: var(--radius-xl);
+            overflow: hidden;
+            box-shadow: var(--shadow-lg);
+            border: 1px solid var(--primary-200);
+        }
+
+        .results-table th {
+            background: linear-gradient(135deg, var(--accent-600), var(--accent-500));
+            color: white;
+            padding: var(--space-5) var(--space-6);
+            text-align: left;
+            font-weight: 600;
+            font-size: 0.95rem;
+            border-bottom: 2px solid var(--accent-600);
+        }
+
+        .results-table td {
+            padding: var(--space-5) var(--space-6);
+            border-bottom: 1px solid var(--primary-200);
+            vertical-align: top;
+            transition: var(--transition-normal);
+        }
+
+        .results-table tr:hover {
+            background: var(--primary-50);
+            transition: var(--transition-normal);
+        }
+
+        .results-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .id-cell {
+            font-family: 'JetBrains Mono', monospace;
+            background: var(--primary-100);
+            padding: var(--space-1) var(--space-3);
+            border-radius: var(--radius-md);
+            font-size: 0.875rem;
+            color: var(--text-700);
+            border: 1px solid var(--primary-200);
+            display: inline-block;
+            margin: var(--space-1) 0;
+        }
+
+        .no-results {
             text-align: center;
-            padding-top: 2rem;
-            margin-top: 2rem;
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
-            color: #777;
-            font-size: 0.9rem;
+            padding: var(--space-20) var(--space-6);
+            color: var(--text-500);
         }
 
-        /* 响应式设计 */
-        @media (max-width: 1200px) {
-            .container { padding: 18px 1vw 0 1vw; }
-            .hero-content h1 { font-size: 2.2rem; }
+        .no-results i {
+            font-size: 5rem;
+            margin-bottom: var(--space-6);
+            opacity: 0.3;
+            color: var(--primary-400);
         }
 
-        @media (max-width: 900px) {
-            .results-grid { grid-template-columns: 1fr; }
-            .search-section { flex-direction: column; align-items: stretch; }
-            .filter-row { flex-direction: column; }
+        .no-results h3 {
+            font-size: 1.75rem;
+            margin-bottom: var(--space-3);
+            color: var(--text-700);
+            font-weight: 600;
         }
 
-        @media (max-width: 600px) {
-            .navbar { flex-direction: column; gap: 0.5rem; padding: 0.7rem 2vw; }
-            .logo { font-size: 1.3rem; }
-            .container { padding: 8px 0.5vw 0 0.5vw; }
-            .hero { padding: 2rem 0 1.2rem 0; border-radius: 0; }
-            .card { padding: 1.1rem 1vw 0.7rem 1vw; }
-            .card-title { font-size: 1.1rem; }
-            .stats-overview span { font-size: 1rem; padding: 0.3rem 0.7rem; }
-            .result-item { padding: 1.1rem 0.5rem 0.7rem 0.5rem; }
+        .no-results p {
+            font-size: 1.125rem;
+            color: var(--text-500);
+            max-width: 500px;
+            margin: 0 auto;
         }
 
-        /* 动画效果 */
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
+        .loading {
+            text-align: center;
+            padding: var(--space-16) var(--space-6);
+            color: var(--text-500);
         }
 
-        .fade-in {
-            animation: fadeIn 0.6s ease forwards;
+        .spinner {
+            border: 4px solid var(--primary-200);
+            border-top: 4px solid var(--accent-500);
+            border-radius: 50%;
+            width: 60px;
+            height: 60px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto var(--space-5);
         }
 
         @keyframes spin {
@@ -702,991 +622,1775 @@
             100% { transform: rotate(360deg); }
         }
 
-        .spin {
-            animation: spin 1s linear infinite;
+        .section-title {
+            color: var(--text-800);
+            font-size: 1.75rem;
+            font-weight: 700;
+            margin-bottom: var(--space-5);
+            padding-bottom: var(--space-3);
+            border-bottom: 3px solid var(--accent-500);
+            display: flex;
+            align-items: center;
+            gap: var(--space-3);
         }
 
-        /* 自定义滚动条 */
-        ::-webkit-scrollbar {
-            width: 10px;
-            height: 10px;
+        .section-title i {
+            color: var(--accent-500);
         }
 
-        ::-webkit-scrollbar-track {
-            background: #f1f1f1;
-            border-radius: 10px;
+        /* 新增功能样式 */
+        .search-actions {
+            margin-bottom: 20px;
+            display: flex;
+            gap: 12px;
         }
 
-        ::-webkit-scrollbar-thumb {
-            background: var(--accent-color);
-            border-radius: 10px;
+        .secondary-button {
+            padding: 12px 20px;
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+            border: 2px solid var(--border-color);
+            border-radius: var(--border-radius);
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 8px;
         }
 
-        ::-webkit-scrollbar-thumb:hover {
+        .secondary-button:hover {
+            background: var(--bg-primary);
+            border-color: var(--secondary-color);
+            color: var(--secondary-color);
+        }
+
+        .results-actions {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+        }
+
+        .action-button {
+            padding: 10px 20px;
+            background: linear-gradient(135deg, var(--warning-color), #e67e22);
+            color: white;
+            border: none;
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .action-button:hover {
+            background: linear-gradient(135deg, #e67e22, var(--warning-color));
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-medium);
+        }
+
+        /* 面板样式 */
+        .analytics-panel,
+        .network-panel,
+        .advanced-panel {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .panel-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 30px;
             background: var(--primary-color);
+            color: white;
+            border-radius: var(--border-radius) var(--border-radius) 0 0;
         }
 
-        /* 高亮样式 */
-        .highlight {
-            background: #ffe066;
+        .panel-header h3 {
+            margin: 0;
+            font-size: 20px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .close-button {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 18px;
+            cursor: pointer;
+            padding: 8px;
             border-radius: 4px;
-            padding: 0 2px;
+            transition: var(--transition);
         }
-        /* 骨架屏 */
-        .skeleton {
-            background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 37%, #f0f0f0 63%);
-            background-size: 400% 100%;
-            animation: skeleton-loading 1.4s ease infinite;
-            border-radius: 8px;
-            min-height: 24px;
+
+        .close-button:hover {
+            background: rgba(255, 255, 255, 0.1);
         }
-        @keyframes skeleton-loading {
-            0% { background-position: 100% 50%; }
-            100% { background-position: 0 50%; }
+
+        .analytics-content,
+        .network-content,
+        .advanced-content {
+            background: var(--bg-secondary);
+            border-radius: 0 0 var(--border-radius) var(--border-radius);
+            max-height: 80vh;
+            overflow-y: auto;
         }
-        /* 模态弹窗 */
-        .modal {
-            position: fixed; left: 0; top: 0; width: 100vw; height: 100vh;
-            background: rgba(79,140,255,0.18); display: flex; align-items: center; justify-content: center; z-index: 2000;
-            animation: fadeIn 0.3s;
+
+        .analytics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            padding: 30px;
         }
-        .modal-content {
-            background: #fff; border-radius: 18px; padding: 2.5rem 2rem; min-width: 340px; max-width: 95vw;
-            box-shadow: 0 8px 32px rgba(79,140,255,0.18);
+
+        .analytics-card {
+            background: var(--bg-primary);
+            border-radius: var(--border-radius);
+            padding: 20px;
+            box-shadow: var(--shadow-light);
+        }
+
+        .analytics-card h4 {
+            margin: 0 0 15px 0;
+            color: var(--primary-color);
+            font-size: 16px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .chart-container {
+            height: 200px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--bg-secondary);
+            border-radius: var(--border-radius);
+            border: 1px solid var(--border-color);
+        }
+
+        .list-container {
+            max-height: 200px;
+            overflow-y: auto;
+        }
+
+        .list-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: var(--space-2) var(--space-3);
+            margin: var(--space-1) 0;
+            background: white;
+            border-radius: var(--radius-md);
+            border-left: 3px solid var(--accent-500);
+            transition: var(--transition-normal);
+        }
+
+        .list-item:hover {
+            background: var(--primary-50);
+            transform: translateX(4px);
+        }
+
+        .list-item .name {
+            font-weight: 500;
+            color: var(--text-800);
+        }
+
+        .list-item .count {
+            background: var(--accent-500);
+            color: white;
+            padding: var(--space-1) var(--space-2);
+            border-radius: var(--radius-lg);
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        .stats-container {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: var(--space-4);
+        }
+
+        .stat-box {
+            text-align: center;
+            padding: var(--space-4);
+            background: white;
+            border-radius: var(--radius-lg);
+            border: 1px solid var(--primary-200);
+            transition: var(--transition-normal);
+        }
+
+        .stat-box:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .stat-box .number {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--accent-500);
+            display: block;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .stat-box .label {
+            font-size: 0.75rem;
+            color: var(--text-600);
+            margin-top: var(--space-1);
+            font-weight: 500;
+        }
+
+        .network-container {
+            height: 600px;
+            background: white;
+            border-radius: var(--radius-xl);
+            margin: var(--space-5);
+            border: 1px solid var(--primary-200);
             position: relative;
+            box-shadow: var(--shadow-md);
+        }
+
+        .network-controls {
+            display: flex;
+            gap: var(--space-2);
+            align-items: center;
+        }
+
+        .control-button {
+            padding: var(--space-2) var(--space-4);
+            background: white;
+            color: var(--text-700);
+            border: 1px solid var(--primary-200);
+            border-radius: var(--radius-md);
+            cursor: pointer;
+            font-size: 0.875rem;
+            transition: var(--transition-normal);
+            display: flex;
+            align-items: center;
+            gap: var(--space-1);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .control-button:hover {
+            background: var(--primary-50);
+            border-color: var(--accent-500);
+            color: var(--accent-600);
+            transform: translateY(-1px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .advanced-filters {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: var(--space-5);
+            padding: var(--space-8);
+        }
+
+        .filter-group {
+            display: flex;
+            flex-direction: column;
+            gap: var(--space-2);
+        }
+
+        .filter-group label {
+            font-weight: 600;
+            color: var(--text-800);
+            font-size: 0.875rem;
+        }
+
+        .filter-group select {
+            padding: var(--space-3) var(--space-4);
+            border: 2px solid var(--primary-200);
+            border-radius: var(--radius-lg);
+            font-size: 0.95rem;
+            background: white;
+            transition: var(--transition-normal);
+            color: var(--text-700);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .filter-group select:focus {
+            outline: none;
+            border-color: var(--accent-500);
+            box-shadow: 0 0 0 3px var(--accent-100);
+        }
+
+        .filter-group select:hover {
+            border-color: var(--primary-300);
+        }
+
+        .advanced-actions {
+            display: flex;
+            gap: var(--space-4);
+            padding: 0 var(--space-8) var(--space-8) var(--space-8);
+            justify-content: center;
+        }
+
+        @media (max-width: 768px) {
+            .search-input-group {
+                flex-direction: column;
+            }
+            
+            .header h1 {
+                font-size: 2.5rem;
+            }
+            
+            .header .subtitle {
+                font-size: 1.125rem;
+            }
+            
+            .container {
+                margin: var(--space-3);
+                border-radius: var(--radius-xl);
+            }
+
+            .stats-bar {
+                gap: var(--space-4);
+                grid-template-columns: 1fr;
+            }
+
+            .stat-item {
+                padding: var(--space-4) var(--space-5);
+            }
+
+            .stat-number {
+                font-size: 2rem;
+            }
+
+            .search-section {
+                padding: var(--space-8) var(--space-5);
+            }
+
+            .results-section {
+                padding: var(--space-8) var(--space-5);
+            }
+
+            .section-title {
+                font-size: 1.5rem;
+            }
+
+            .results-table th,
+            .results-table td {
+                padding: var(--space-3) var(--space-4);
+                font-size: 0.875rem;
+            }
+
+            .modal-content {
+                margin: 2% auto;
+                padding: var(--space-6);
+                width: 95%;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .header h1 {
+                font-size: 2rem;
+            }
+
+            .header .subtitle {
+                font-size: 1rem;
+            }
+
+            .stats-bar {
+                grid-template-columns: 1fr;
+                gap: var(--space-4);
+            }
+
+            .search-tabs {
+                flex-direction: column;
+            }
+
+            .tab {
+                border-radius: 0;
+            }
+
+            .tab:first-child {
+                border-radius: var(--radius-xl) var(--radius-xl) 0 0;
+            }
+
+            .tab:last-child {
+                border-radius: 0 0 var(--radius-xl) var(--radius-xl);
+            }
+
+            .search-input-group {
+                gap: var(--space-3);
+            }
+
+            .search-button {
+                min-width: 100%;
+            }
+
+            .results-header {
+                flex-direction: column;
+                gap: var(--space-4);
+                align-items: stretch;
+            }
+
+            .export-button {
+                align-self: flex-end;
+            }
+        }
+
+        /* 新布局主结构 */
+        .app-layout {
+            display: flex;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        .sidebar {
+            width: 260px;
+            background: var(--primary-900);
+            color: var(--text-100);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            box-shadow: var(--shadow-xl);
+            position: relative;
+            z-index: 10;
+        }
+        .sidebar-header {
+            display: flex;
+            align-items: center;
+            gap: var(--space-3);
+            font-size: 1.3rem;
+            font-weight: 700;
+            padding: var(--space-6) var(--space-4) var(--space-4) var(--space-6);
+            letter-spacing: 0.02em;
+        }
+        .sidebar-title {
             font-size: 1.1rem;
-            color: var(--dark-color);
-            animation: fadeIn 0.3s;
+            font-weight: 600;
+            color: var(--accent-200);
         }
-        .modal-close {
-            position: absolute; right: 1.2rem; top: 1.2rem; font-size: 2rem; cursor: pointer; color: #888;
-            transition: color 0.2s;
+        .sidebar-nav {
+            display: flex;
+            flex-direction: column;
+            gap: var(--space-2);
+            padding: var(--space-2) var(--space-4);
         }
-        .modal-close:hover { color: var(--primary-color); }
-        /* 统计总览 */
-        .stats-overview {
-            display: flex; gap: 2rem; margin-bottom: 1rem; font-size: 1.1rem; color: #3f37c9;
+        .sidebar-btn {
+            background: none;
+            border: none;
+            color: var(--text-100);
+            font-size: 1rem;
+            font-weight: 500;
+            padding: var(--space-3) var(--space-2);
+            border-radius: var(--radius-lg);
+            text-align: left;
+            cursor: pointer;
+            transition: var(--transition-normal);
+            display: flex;
+            align-items: center;
+            gap: var(--space-2);
         }
-        .stats-overview span { background: #f0f4ff; border-radius: 20px; padding: 0.3rem 1rem; }
-        /* 按钮点击动画 */
-        .btn:active { transform: scale(0.96); }
-        .pagination { display:inline-block; margin-top:1.5rem; }
-        .page-btn { background:#fff; border:1px solid #4895ef; color:#4895ef; border-radius:6px; margin:0 2px; padding:0.4rem 1rem; cursor:pointer; font-size:1rem; transition:all 0.2s; }
-        .page-btn.active, .page-btn:hover { background:#4895ef; color:#fff; }
-        .page-btn[disabled] { opacity:0.5; cursor:not-allowed; }
-        .page-ellipsis { display:inline-block; width:2rem; color:#aaa; }
+        .sidebar-btn:hover, .sidebar-btn.active {
+            background: var(--primary-700);
+            color: var(--accent-200);
+        }
+        .sidebar-footer {
+            padding: var(--space-4) var(--space-6);
+            border-top: 1px solid var(--primary-700);
+        }
+        .sidebar-link {
+            color: var(--accent-200);
+            text-decoration: none;
+            font-size: 0.95rem;
+            display: flex;
+            align-items: center;
+            gap: var(--space-2);
+            transition: color var(--transition-normal);
+        }
+        .sidebar-link:hover {
+            color: var(--accent-400);
+        }
+
+        .main-area {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            min-width: 0;
+            background: var(--primary-50);
+        }
+        .main-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: var(--space-6) var(--space-10) var(--space-4) var(--space-10);
+            background: var(--primary-50);
+            border-bottom: 1px solid var(--primary-200);
+            box-shadow: var(--shadow-sm);
+        }
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: var(--space-3);
+        }
+        .main-logo {
+            font-size: 2.2rem;
+            color: var(--accent-500);
+        }
+        .main-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary-900);
+            letter-spacing: 0.01em;
+        }
+        .header-stats {
+            display: flex;
+            gap: var(--space-6);
+        }
+        .main-content {
+            flex: 1;
+            padding: var(--space-10) var(--space-10) var(--space-6) var(--space-10);
+            display: flex;
+            flex-direction: column;
+            min-width: 0;
+            gap: var(--space-8);
+        }
+        .card-section {
+            background: white;
+            border-radius: var(--radius-2xl);
+            box-shadow: var(--shadow-xl);
+            padding: var(--space-8) var(--space-6);
+            margin-bottom: var(--space-8);
+            border: 1px solid var(--primary-200);
+            position: relative;
+        }
+        .card-section:last-child {
+            margin-bottom: 0;
+        }
+        /* 让分析/网络/高级面板也有卡片感 */
+        .analytics-panel, .network-panel, .advanced-panel {
+            background: rgba(255,255,255,0.98);
+            border-radius: var(--radius-2xl);
+            box-shadow: var(--shadow-2xl);
+            border: 1px solid var(--primary-200);
+            padding: var(--space-6) var(--space-4);
+            max-width: 1400px;
+            width: 96vw;
+            margin: 4vh auto;
+            position: fixed;
+            left: 0; right: 0;
+            top: 0; bottom: 0;
+            z-index: 2000;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: var(--space-6);
+        }
+        .analytics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: var(--space-6);
+            margin-bottom: var(--space-8);
+        }
+        .panel-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: var(--space-4);
+        }
+        .panel-header h3 {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--primary-900);
+            display: flex;
+            align-items: center;
+            gap: var(--space-2);
+        }
+        .close-button {
+            background: none;
+            border: none;
+            color: var(--text-400);
+            font-size: 1.5rem;
+            cursor: pointer;
+            border-radius: var(--radius-lg);
+            padding: var(--space-2);
+            transition: background var(--transition-normal);
+        }
+        .close-button:hover {
+            background: var(--primary-100);
+            color: var(--accent-500);
+        }
+        .main-footer {
+            background: var(--primary-900);
+            color: var(--text-100);
+            text-align: center;
+            padding: var(--space-4) var(--space-6);
+            font-size: 0.95rem;
+            letter-spacing: 0.01em;
+        }
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        /* 响应式布局 */
+        @media (max-width: 1100px) {
+            .main-header, .main-content {
+                padding-left: var(--space-5);
+                padding-right: var(--space-5);
+            }
+            .header-stats {
+                gap: var(--space-3);
+            }
+        }
+        @media (max-width: 900px) {
+            .sidebar {
+                width: 60px;
+                min-width: 60px;
+            }
+            .sidebar-header, .sidebar-footer {
+                display: none;
+            }
+            .sidebar-nav {
+                padding: var(--space-2);
+                gap: var(--space-1);
+            }
+            .sidebar-btn {
+                justify-content: center;
+                font-size: 1.2rem;
+                padding: var(--space-3) 0;
+            }
+            .main-header, .main-content {
+                padding-left: var(--space-2);
+                padding-right: var(--space-2);
+            }
+        }
+        @media (max-width: 600px) {
+            .app-layout {
+                flex-direction: column;
+            }
+            .sidebar {
+                width: 100%;
+                min-width: 0;
+                flex-direction: row;
+                box-shadow: none;
+                border-bottom: 1px solid var(--primary-200);
+            }
+            .main-header, .main-content {
+                padding-left: var(--space-2);
+                padding-right: var(--space-2);
+            }
+            .header-stats {
+                flex-direction: column;
+                gap: var(--space-2);
+            }
+        }
+
+        /* 结果弹窗样式 */
+        #results-card {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            z-index: 1000;
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(10px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+        }
+        #results-card .results-section {
+            background: white;
+            border-radius: var(--radius-2xl);
+            box-shadow: var(--shadow-2xl);
+            max-width: 1200px;
+            width: 96vw;
+            max-height: 90vh;
+            min-height: 300px;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            padding: 0;
+        }
+        #results-card .results-header {
+            position: sticky;
+            top: 0;
+            background: white;
+            z-index: 10;
+            padding: var(--space-6) var(--space-6) var(--space-4) var(--space-6);
+            border-bottom: 1px solid var(--primary-200);
+            margin-bottom: 0;
+        }
+        #results-container {
+            flex: 1;
+            overflow-y: auto;
+            padding: var(--space-6);
+        }
+        @media (max-width: 700px) {
+            #results-card .results-section {
+                max-width: 100vw;
+                width: 100vw;
+                max-height: 100vh;
+                border-radius: 0;
+            }
+            #results-container {
+                padding: var(--space-3);
+            }
+            #results-card .results-header {
+                padding: var(--space-4) var(--space-3) var(--space-3) var(--space-3);
+            }
+        }
+
+        .analytics-panel {
+            max-width: 900px;
+            width: auto;
+            padding: var(--space-2) var(--space-1);
+        }
+        .analytics-grid {
+            width: 100%;
+            max-width: none;
+            margin: 0;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: var(--space-3);
+        }
+        .analytics-card {
+            width: 100%;
+            margin: 0;
+            padding: var(--space-3);
+        }
+        #stats-summary.stats-container {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: var(--space-3);
+            width: 100%;
+            margin: 0 auto;
+        }
+        .stat-box {
+            width: 100%;
+            margin: 0;
+            padding: var(--space-3);
+        }
+        @media (max-width: 900px) {
+            .analytics-panel {
+                max-width: 100vw;
+                width: 100vw;
+                border-radius: 0;
+                padding: var(--space-1);
+            }
+            .analytics-grid {
+                grid-template-columns: 1fr;
+                gap: var(--space-2);
+            }
+            #stats-summary.stats-container {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
     </style>
 </head>
 <body>
-    <!-- 导航栏 -->
-    <nav class="navbar">
-        <div class="logo">
-            <i class="fas fa-dna"></i>
-            <span id="nav-title">代谢组学分析平台</span>
-        </div>
-        <div class="nav-links">
-            <a href="#" id="nav-home"><i class="fas fa-home"></i> 首页</a>
-            <a href="https://hmdb.ca/" target="_blank" id="nav-data"><i class="fas fa-database"></i> 数据源</a>
-            <a href="javascript:void(0)" id="nav-contact" onclick="showContactModal()"><i class="fas fa-envelope"></i> 联系我们</a>
-        </div>
-        <div class="lang-switch" style="margin-left:2rem;">
-            <button id="lang-zh" class="btn btn-sm" style="margin-right:0.5rem;">中文</button>
-            <button id="lang-en" class="btn btn-outline btn-sm">English</button>
-        </div>
-    </nav>
+    <div class="app-layout">
+        <!-- 侧边栏 -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <i class="fas fa-dna"></i>
+                <span class="sidebar-title">Disease-Metabolite Database</span>
+            </div>
+            <nav class="sidebar-nav">
+                <button class="sidebar-btn" onclick="switchSearchMode('text')"><i class="fas fa-search"></i> Text Search</button>
+                <button class="sidebar-btn" onclick="switchSearchMode('dropdown')"><i class="fas fa-list"></i> Dropdown</button>
+                <button class="sidebar-btn" onclick="showAdvancedSearch()"><i class="fas fa-search-plus"></i> Advanced Search</button>
+                <hr>
+                <button class="sidebar-btn" onclick="showAnalytics()"><i class="fas fa-chart-line"></i> Analytics</button>
+                <button class="sidebar-btn" onclick="showNetwork()"><i class="fas fa-project-diagram"></i> Network</button>
+                <button class="sidebar-btn" onclick="exportResults()"><i class="fas fa-download"></i> Export</button>
+            </nav>
+            <div class="sidebar-footer">
+                <a href="#help" class="sidebar-link"><i class="fas fa-question-circle"></i> Help</a>
+            </div>
+        </aside>
 
-    <!-- 主内容区 -->
-    <main class="container">
-        <!-- 英雄区域 -->
-        <section class="hero">
-            <div class="hero-content">
-                <h1>代谢物与疾病关联可视化分析</h1>
-                <p class="subtitle">探索疾病与代谢物之间的复杂关系网络，发现潜在的生物标志物</p>
-                <div class="search-section">
-                    <div class="search-box">
-                        <label for="search-input"><i class="fas fa-search"></i> 关键词搜索</label>
-                        <input type="text" id="search-input" placeholder="输入疾病或代谢物名称...">
-                        <i class="fas fa-search"></i>
+        <div class="main-area">
+            <!-- 顶部Header -->
+            <header class="main-header">
+                <div class="header-left">
+                    <span class="main-logo"><i class="fas fa-dna"></i></span>
+                    <span class="main-title">Disease-Metabolite Association Database Query System</span>
+                </div>
+                <div class="header-stats">
+                    <div class="stat-item">
+                        <span class="stat-number" id="total-associations">-</span>
+                        <span class="stat-label">Total Associations</span>
                     </div>
-                    <div class="search-box">
-                        <label for="search-type"><i class="fas fa-filter"></i> 搜索类型</label>
-                        <select id="search-type">
-                            <option value="all">全部类型</option>
-                            <option value="disease">仅疾病</option>
-                            <option value="metabolite">仅代谢物</option>
+                    <div class="stat-item">
+                        <span class="stat-number" id="unique-metabolites">-</span>
+                        <span class="stat-label">Unique Metabolites</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-number" id="unique-diseases">-</span>
+                        <span class="stat-label">Unique Diseases</span>
+                    </div>
+                </div>
+            </header>
+
+            <main class="main-content">
+                <!-- 搜索区 -->
+                <section class="card-section">
+                    <div class="search-section">
+                        <div class="search-tabs">
+                            <button class="tab active" onclick="switchSearchMode('text')">
+                                <i class="fas fa-search"></i> Text Search
+                            </button>
+                            <button class="tab" onclick="switchSearchMode('dropdown')">
+                                <i class="fas fa-list"></i> Dropdown
+                            </button>
+                        </div>
+                        <!-- 文本搜索模式 -->
+                        <div id="text-search" class="search-form active">
+                            <div class="search-input-group">
+                                <select id="search-type" class="search-select">
+                                    <option value="all">All Types</option>
+                                    <option value="metabolite">Metabolite</option>
+                                    <option value="disease">Disease</option>
+                                </select>
+                                <input type="text" id="search-input" class="search-input" placeholder="Enter metabolite or disease name/ID...">
+                                <button onclick="searchAll()" class="search-button">
+                                    <i class="fas fa-search"></i> Search
+                                </button>
+                            </div>
+                            <div class="search-actions">
+                                <button class="secondary-button" onclick="showAdvancedSearch()">
+                                    <i class="fas fa-search-plus"></i> Advanced Search
+                                </button>
+                            </div>
+                            <div class="search-examples">
+                                <h4><i class="fas fa-lightbulb"></i> Search Examples:</h4>
+                                <div class="example-item"><strong>Metabolite:</strong> Glucose, Cholesterol, Vitamin A, HMDB0000122</div>
+                                <div class="example-item"><strong>Disease:</strong> Diabetes, Cancer, Alzheimer's Disease, D003920</div>
+                            </div>
+                        </div>
+                        <!-- 下拉选择模式 -->
+                        <div id="dropdown-search" class="search-form">
+                            <div class="search-input-group">
+                                <select id="metabolite-select" class="search-select">
+                                    <option value="">Select Metabolite...</option>
+                                </select>
+                                <select id="disease-select" class="search-select">
+                                    <option value="">Select Disease...</option>
+                                </select>
+                                <button onclick="searchByDropdown()" class="search-button">
+                                    <i class="fas fa-search"></i> Search
+                                </button>
+                            </div>
+                            <div class="search-examples">
+                                <h4><i class="fas fa-info-circle"></i> Instructions:</h4>
+                                <div class="example-item">Select a metabolite to view related diseases</div>
+                                <div class="example-item">Select a disease to view related metabolites</div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- 结果区 -->
+                <section class="card-section" id="results-card" style="display: none;">
+                    <div class="results-section">
+                        <div class="results-header">
+                            <div class="results-title">
+                                <i class="fas fa-search"></i> Search Results
+                            </div>
+                            <div class="results-count" id="results-count"></div>
+                            <div class="results-actions" id="results-actions" style="display: none;">
+                                <button class="secondary-button" onclick="showAnalytics()" id="analytics-btn">
+                                    <i class="fas fa-chart-line"></i> Analytics
+                                </button>
+                                <button class="secondary-button" onclick="showNetwork()" id="network-btn">
+                                    <i class="fas fa-project-diagram"></i> Network
+                                </button>
+                                <button class="export-button" onclick="exportResults()" id="export-btn">
+                                    <i class="fas fa-download"></i> Export Results
+                                </button>
+                            </div>
+                            <button class="close-button" onclick="closeResults()">
+                                <i class="fas fa-times"></i>
+                            </button>
+                        </div>
+                        <div id="results-container">
+                            <div class="no-results">
+                                <i class="fas fa-database"></i>
+                                <h3>Welcome to Disease-Metabolite Association Query System</h3>
+                                <p>Enter a metabolite or disease name/ID to start searching, or use the dropdown to browse all available items.</p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </main>
+
+            <footer class="main-footer">
+                <div class="footer-content">
+                    <span>© 2024 Disease-Metabolite Association Database | Data Source: HMDB database | Contact: jianzhang0934@163.com</span>
+                </div>
+            </footer>
+        </div>
+
+        <!-- 数据分析面板 -->
+        <div id="analytics-panel" class="analytics-panel" style="display: none;">
+            <div class="panel-header">
+                <h3><i class="fas fa-chart-line"></i> Analytics</h3>
+                <button class="close-button" onclick="hideAnalytics()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="analytics-content">
+                <div class="analytics-grid">
+                    <div class="analytics-card">
+                        <h4><i class="fas fa-chart-pie"></i> Association Distribution</h4>
+                        <div id="association-chart" class="chart-container"></div>
+                    </div>
+                    <div class="analytics-card">
+                        <h4><i class="fas fa-chart-bar"></i> Top Metabolites</h4>
+                        <div id="top-metabolites" class="list-container"></div>
+                    </div>
+                    <div class="analytics-card">
+                        <h4><i class="fas fa-chart-bar"></i> Top Diseases</h4>
+                        <div id="top-diseases" class="list-container"></div>
+                    </div>
+                    <div class="analytics-card">
+                        <h4><i class="fas fa-info-circle"></i> Statistics Summary</h4>
+                        <div id="stats-summary" class="stats-container"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 网络图面板 -->
+        <div id="network-panel" class="network-panel" style="display: none;">
+            <div class="panel-header">
+                <h3><i class="fas fa-project-diagram"></i> Association Network</h3>
+                <div class="network-controls">
+                    <button class="control-button" onclick="resetNetwork()">
+                        <i class="fas fa-home"></i> Reset View
+                    </button>
+                    <button class="control-button" onclick="exportNetwork()">
+                        <i class="fas fa-download"></i> Export Image
+                    </button>
+                    <button class="close-button" onclick="hideNetwork()">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+            </div>
+            <div class="network-content">
+                <div id="network-container" class="network-container"></div>
+            </div>
+        </div>
+
+        <!-- 高级搜索面板 -->
+        <div id="advanced-search-panel" class="advanced-panel" style="display: none;">
+            <div class="panel-header">
+                <h3><i class="fas fa-search-plus"></i> Advanced Search</h3>
+                <button class="close-button" onclick="hideAdvancedSearch()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="advanced-content">
+                <div class="advanced-filters">
+                    <div class="filter-group">
+                        <label>Association Strength Filter</label>
+                        <select id="strength-filter">
+                            <option value="">All</option>
+                            <option value="high">High Association</option>
+                            <option value="medium">Medium Association</option>
+                            <option value="low">Low Association</option>
                         </select>
                     </div>
-                    <div class="search-box">
-                        <label for="search-id"><i class="fas fa-barcode"></i> 标识符</label>
-                        <input type="text" id="search-id" placeholder="Mesh ID / HMDB ID...">
+                    <div class="filter-group">
+                        <label>Disease Type</label>
+                        <select id="disease-type-filter">
+                            <option value="">All</option>
+                            <option value="type1">Type 1</option>
+                            <option value="type2">Type 2</option>
+                        </select>
                     </div>
-                    <div style="align-self: flex-end; display:flex; gap:0.7rem;">
-                        <button id="search-button" class="btn"><i class="fas fa-search"></i> 搜索</button>
-                        <button id="example-btn" class="btn btn-outline"><i class="fas fa-lightbulb"></i> 举例</button>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- 主要内容区域 -->
-        <div class="main-content">
-            <!-- 筛选和统计区域 -->
-            <section class="card">
-                <div class="card-header">
-                    <h2 class="card-title"><i class="fas fa-sliders-h"></i> 高级筛选</h2>
-                    <div class="card-actions">
-                        <button class="btn btn-outline btn-sm"><i class="fas fa-sync-alt"></i> 重置</button>
+                    <div class="filter-group">
+                        <label>Metabolite Category</label>
+                        <select id="metabolite-category-filter">
+                            <option value="">All</option>
+                            <option value="cat1">Category 1</option>
+                            <option value="cat2">Category 2</option>
+                        </select>
                     </div>
                 </div>
-                <div class="filter-section">
-                    <div class="filter-row">
-                        <div class="filter-group">
-                            <label for="disease-filter"><i class="fas fa-disease"></i> 按疾病筛选</label>
-                            <select id="disease-filter">
-                                <option value="">所有疾病</option>
-                                <!-- 动态填充 -->
-                            </select>
-                        </div>
-                        <div class="filter-group">
-                            <label for="metabolite-filter"><i class="fas fa-atom"></i> 按代谢物筛选</label>
-                            <select id="metabolite-filter">
-                                <option value="">所有代谢物</option>
-                                <!-- 动态填充 -->
-                            </select>
-                        </div>
-                        <div class="filter-group">
-                            <label for="sort-by"><i class="fas fa-sort"></i> 排序方式</label>
-                            <select id="sort-by">
-                                <option value="relevance">相关性</option>
-                                <option value="disease-asc">疾病名称 (A-Z)</option>
-                                <option value="disease-desc">疾病名称 (Z-A)</option>
-                                <option value="metabolite-asc">代谢物名称 (A-Z)</option>
-                                <option value="metabolite-desc">代谢物名称 (Z-A)</option>
-                            </select>
-                        </div>
-                    </div>
-                    
-                    <!-- 标签云 -->
-                    <div class="tag-cloud" id="disease-tags">
-                        <span class="tag active">全部</span>
-                        <span class="tag">心血管疾病</span>
-                        <span class="tag">神经系统疾病</span>
-                        <span class="tag">代谢性疾病</span>
-                        <span class="tag">癌症</span>
-                        <span class="tag">遗传性疾病</span>
-                    </div>
-                </div>
-            </section>
-
-            <!-- 可视化图表 -->
-            <section class="card">
-                <div class="card-header">
-                    <h2 class="card-title"><i class="fas fa-chart-pie"></i> 数据概览</h2>
-                    <div class="card-actions">
-                        <button class="btn btn-outline btn-sm"><i class="fas fa-download"></i> 导出</button>
-                    </div>
-                </div>
-                <div class="chart-container" id="main-chart">
-                    <!-- 图表将通过JavaScript渲染 -->
-                </div>
-                <div class="stats-overview" id="stats-overview"></div>
-            </section>
-
-            <!-- 结果统计 -->
-            <div class="result-stats">
-                <div class="result-count" id="result-count">
-                    <i class="fas fa-info-circle"></i> 准备搜索...
-                </div>
-                <div class="result-actions">
-                    <button class="btn btn-outline btn-sm"><i class="fas fa-download"></i> 导出结果</button>
-                    <button class="btn btn-outline btn-sm"><i class="fas fa-share-alt"></i> 分享</button>
-                </div>
-            </div>
-
-            <!-- 结果列表 -->
-            <div class="results-grid" id="results-container">
-                <div class="empty-state">
-                    <i class="fas fa-search"></i>
-                    <h3>开始您的探索之旅</h3>
-                    <p>输入搜索条件或使用筛选器来查找疾病与代谢物之间的关联关系</p>
-                    <button class="btn"><i class="fas fa-random"></i> 查看随机示例</button>
-                </div>
-            </div>
-            <div id="pagination-container" style="margin:2rem 0 1rem 0;text-align:center;"></div>
-        </div>
-    </main>
-
-    <!-- 页脚 -->
-    <footer>
-        <div class="footer-content">
-            <div class="footer-column" style="text-align: center; width: 100%;">
-                <h3>联系我们</h3>
-                <div class="footer-links" style="display: flex; justify-content: center; gap: 2rem; flex-wrap: wrap;">
-                    <a href="mailto:lupengli88@163.com" style="color: #aaa; text-decoration: none; transition: var(--transition); display: flex; align-items: center; gap: 0.5rem;">
-                        <i class="fas fa-envelope"></i> 电子邮件
-                    </a>
-                    <a href="javascript:void(0)" onclick="showContactModal()" style="color: #aaa; text-decoration: none; transition: var(--transition); display: flex; align-items: center; gap: 0.5rem;">
-                        <i class="fas fa-university"></i> 机构信息
-                    </a>
-                    <a href="javascript:void(0)" onclick="showContactModal()" style="color: #aaa; text-decoration: none; transition: var(--transition); display: flex; align-items: center; gap: 0.5rem;">
-                        <i class="fas fa-map-marker-alt"></i> 地址信息
-                    </a>
-                    <a href="javascript:void(0)" onclick="showContactModal()" style="color: #aaa; text-decoration: none; transition: var(--transition); display: flex; align-items: center; gap: 0.5rem;">
-                        <i class="fas fa-clock"></i> 工作时间
-                    </a>
+                <div class="advanced-actions">
+                    <button class="search-button" onclick="applyAdvancedFilters()"><i class="fas fa-filter"></i> Apply Filters</button>
+                    <button class="secondary-button" onclick="clearAdvancedFilters()"><i class="fas fa-eraser"></i> Clear</button>
                 </div>
             </div>
         </div>
-        <div class="footer-bottom">
-            <p>&copy; 2023 代谢组学分析平台 | School of Computer and Communication, Lanzhou University of Technology | 所有权利保留</p>
-        </div>
-    </footer>
+    </div>
 
     <script>
-        // 全局变量存储数据
-        let allData = [];
-        let uniqueDiseases = [];
-        let uniqueMetabolites = [];
+        let data = [];
         let currentResults = [];
-        let currentPage = 1;
-        const pageSize = 20;
-        let totalPages = 1;
-        
-        // DOM元素
-        const searchInput = document.getElementById('search-input');
-        const searchType = document.getElementById('search-type');
-        const searchId = document.getElementById('search-id');
-        const searchButton = document.getElementById('search-button');
-        const diseaseFilter = document.getElementById('disease-filter');
-        const metaboliteFilter = document.getElementById('metabolite-filter');
-        const sortBy = document.getElementById('sort-by');
-        const resultCount = document.getElementById('result-count');
-        const resultsContainer = document.getElementById('results-container');
-        const mainChart = document.getElementById('main-chart');
-        const diseaseTags = document.getElementById('disease-tags');
-        
-        // 初始化图表
-        let chartInstance = echarts.init(mainChart);
-        
-        // 加载JSON数据
-        function loadData() {
-            fetch('data.json')
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error('网络响应不正常');
-                    }
-                    return response.json();
-                })
-                .then(data => {
-                    allData = data;
-                    processData();
-                    populateFilters();
-                    updateTagCloud();
-                    performSearch(); // 初始显示所有结果
-                })
-                .catch(error => {
-                    console.error('加载数据时出错:', error);
-                    showError(`无法加载数据: ${error.message}`);
-                });
-        }
-        
-        // 处理数据，提取唯一疾病和代谢物
-        function processData() {
-            const diseaseSet = new Set();
-            const metaboliteSet = new Set();
-            
-            allData.forEach(item => {
-                if (item['Disease Name']) diseaseSet.add(item['Disease Name']);
-                if (item['Metabolite Name']) metaboliteSet.add(item['Metabolite Name']);
-            });
-            
-            uniqueDiseases = Array.from(diseaseSet).sort();
-            uniqueMetabolites = Array.from(metaboliteSet).sort();
-        }
-        
-        // 填充筛选器下拉菜单
-        function populateFilters() {
-            // 清空现有选项
-            diseaseFilter.innerHTML = '<option value="">所有疾病</option>';
-            metaboliteFilter.innerHTML = '<option value="">所有代谢物</option>';
-            
-            // 填充疾病筛选器
-            uniqueDiseases.forEach(disease => {
-                const option = document.createElement('option');
-                option.value = disease;
-                option.textContent = disease;
-                diseaseFilter.appendChild(option);
-            });
-            
-            // 填充代谢物筛选器
-            uniqueMetabolites.forEach(metabolite => {
-                const option = document.createElement('option');
-                option.value = metabolite;
-                option.textContent = metabolite;
-                metaboliteFilter.appendChild(option);
-            });
-        }
-        
-        // 更新标签云
-        function updateTagCloud() {
-            // 这里可以添加更智能的标签生成逻辑
-            // 目前使用静态标签作为示例
-        }
-        
-        // 执行搜索
-        function performSearch() {
-            showSkeleton();
-            const searchTerm = searchInput.value.toLowerCase();
-            const idTerm = searchId.value.toLowerCase();
-            const selectedDisease = diseaseFilter.value;
-            const selectedMetabolite = metaboliteFilter.value;
-            const searchTypeValue = searchType.value;
-            const sortByValue = sortBy.value;
-            let filteredData = allData;
-            if (tagFilter && tagFilter !== '全部') {
-                filteredData = filteredData.filter(item => (item['Disease Name']||'').includes(tagFilter));
+        let allMetabolites = [];
+        let allDiseases = [];
+
+        // 加载数据
+        async function loadData() {
+            try {
+                const response = await fetch('data.json');
+                data = await response.json();
+                console.log(`Data loaded, total ${data.length} records`);
+                
+                // 提取所有唯一的代谢物和疾病
+                extractUniqueItems();
+            } catch (error) {
+                console.error('Data loading failed:', error);
+                showError('Data loading failed, please check if data.json exists');
             }
-            setTimeout(() => {
-                if (selectedDisease) {
-                    filteredData = filteredData.filter(item => item['Disease Name'] === selectedDisease);
-                }
-                if (selectedMetabolite) {
-                    filteredData = filteredData.filter(item => item['Metabolite Name'] === selectedMetabolite);
-                }
-                if (searchTerm || idTerm) {
-                    filteredData = filteredData.filter(item => {
-                        const matchesSearchTerm = !searchTerm || 
-                            (searchTypeValue === 'all' && (
-                                (item['Disease Name'] && item['Disease Name'].toLowerCase().includes(searchTerm)) ||
-                                (item['Metabolite Name'] && item['Metabolite Name'].toLowerCase().includes(searchTerm))
-                            )) ||
-                            (searchTypeValue === 'disease' && item['Disease Name'] && item['Disease Name'].toLowerCase().includes(searchTerm)) ||
-                            (searchTypeValue === 'metabolite' && item['Metabolite Name'] && item['Metabolite Name'].toLowerCase().includes(searchTerm));
-                        const matchesIdTerm = !idTerm || 
-                            (item['Mesh ID'] && item['Mesh ID'].toLowerCase().includes(idTerm)) ||
-                            (item['Metabolite ID'] && item['Metabolite ID'].toLowerCase().includes(idTerm));
-                        return matchesSearchTerm && matchesIdTerm;
+        }
+
+        // 提取所有唯一的代谢物和疾病
+        function extractUniqueItems() {
+            const metaboliteMap = new Map();
+            const diseaseMap = new Map();
+
+            data.forEach(item => {
+                // 提取代谢物
+                const metaboliteKey = `${item['Metabolite Name']}|${item['Metabolite ID']}`;
+                if (!metaboliteMap.has(metaboliteKey)) {
+                    metaboliteMap.set(metaboliteKey, {
+                        name: item['Metabolite Name'],
+                        id: item['Metabolite ID']
                     });
                 }
-                filteredData = sortResults(filteredData, sortByValue);
-                currentResults = filteredData;
-                // 分页
-                totalPages = Math.ceil(filteredData.length / pageSize) || 1;
-                if (currentPage > totalPages) currentPage = totalPages;
-                const pageData = filteredData.slice((currentPage-1)*pageSize, currentPage*pageSize);
-                displayResults(pageData);
-                updatePagination();
-                updateCharts(filteredData);
-                updateStatsOverview();
-            }, 400);
+
+                // 提取疾病
+                const diseaseKey = `${item['Disease Name']}|${item['Mesh ID']}`;
+                if (!diseaseMap.has(diseaseKey)) {
+                    diseaseMap.set(diseaseKey, {
+                        name: item['Disease Name'],
+                        id: item['Mesh ID']
+                    });
+                }
+            });
+
+            allMetabolites = Array.from(metaboliteMap.values());
+            allDiseases = Array.from(diseaseMap.values());
+
+            // 按名称排序
+            allMetabolites.sort((a, b) => a.name.localeCompare(b.name));
+            allDiseases.sort((a, b) => a.name.localeCompare(b.name));
+
+            console.log(`Extracted ${allMetabolites.length} unique metabolites, ${allDiseases.length} unique diseases`);
+            
+            // 更新统计信息
+            updateStats();
+            
+            // 填充下拉列表
+            populateDropdowns();
         }
-        
-        // 排序结果
-        function sortResults(data, sortBy) {
-            switch(sortBy) {
-                case 'disease-asc':
-                    return [...data].sort((a, b) => (a['Disease Name'] || '').localeCompare(b['Disease Name'] || ''));
-                case 'disease-desc':
-                    return [...data].sort((a, b) => (b['Disease Name'] || '').localeCompare(a['Disease Name'] || ''));
-                case 'metabolite-asc':
-                    return [...data].sort((a, b) => (a['Metabolite Name'] || '').localeCompare(b['Metabolite Name'] || ''));
-                case 'metabolite-desc':
-                    return [...data].sort((a, b) => (b['Metabolite Name'] || '').localeCompare(a['Metabolite Name'] || ''));
-                default: // 'relevance'
-                    return data;
+
+        // 更新统计信息
+        function updateStats() {
+            document.getElementById('total-associations').textContent = data.length.toLocaleString();
+            document.getElementById('unique-metabolites').textContent = allMetabolites.length.toLocaleString();
+            document.getElementById('unique-diseases').textContent = allDiseases.length.toLocaleString();
+        }
+
+        // 填充下拉列表
+        function populateDropdowns() {
+            const metaboliteSelect = document.getElementById('metabolite-select');
+            const diseaseSelect = document.getElementById('disease-select');
+
+            // 清空现有选项
+            metaboliteSelect.innerHTML = '<option value="">Select Metabolite...</option>';
+            diseaseSelect.innerHTML = '<option value="">Select Disease...</option>';
+
+            // 添加代谢物选项
+            allMetabolites.forEach(metabolite => {
+                const option = document.createElement('option');
+                option.value = metabolite.name;
+                option.textContent = `${metabolite.name} (${metabolite.id})`;
+                metaboliteSelect.appendChild(option);
+            });
+
+            // 添加疾病选项
+            allDiseases.forEach(disease => {
+                const option = document.createElement('option');
+                option.value = disease.name;
+                option.textContent = `${disease.name} (${disease.id})`;
+                diseaseSelect.appendChild(option);
+            });
+        }
+
+        // 切换搜索模式
+        function switchSearchMode(mode) {
+            // 更新标签状态
+            document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
+            event.target.classList.add('active');
+
+            // 更新搜索表单
+            document.querySelectorAll('.search-form').forEach(form => form.classList.remove('active'));
+            if (mode === 'text') {
+                document.getElementById('text-search').classList.add('active');
+            } else {
+                document.getElementById('dropdown-search').classList.add('active');
             }
+
+            // 清空结果
+            clearResults();
         }
-        
-        // 显示搜索结果
-        function displayResults(results) {
-            if (results.length === 0) {
-                resultsContainer.innerHTML = `
-                    <div class="empty-state">
-                        <i class="fas fa-exclamation-triangle"></i>
-                        <h3>没有找到匹配的结果</h3>
-                        <p>请尝试修改搜索条件或筛选条件</p>
-                        <button class="btn" onclick="resetSearch()"><i class="fas fa-undo"></i> 重置搜索</button>
-                    </div>
-                `;
-                resultCount.innerHTML = `<i class="fas fa-info-circle"></i> 找到 0 条结果`;
+
+        // 文本搜索功能
+        function searchAll() {
+            const query = document.getElementById('search-input').value.trim();
+            const searchType = document.getElementById('search-type').value;
+            
+            if (!query) {
+                alert('Please enter a search keyword');
                 return;
             }
             
-            resultCount.innerHTML = `<i class="fas fa-check-circle"></i> 找到 ${results.length} 条结果`;
+            const results = performSearch(query, searchType);
+            displayResults(results, searchType, query);
+        }
+
+        // 下拉选择搜索功能
+        function searchByDropdown() {
+            const metaboliteSelect = document.getElementById('metabolite-select');
+            const diseaseSelect = document.getElementById('disease-select');
             
-            let html = '';
-            results.forEach((item, index) => {
-                const diseaseName = highlightText(item['Disease Name'] || '未知疾病', searchInput.value);
-                const metaboliteName = highlightText(item['Metabolite Name'] || '未知代谢物', searchInput.value);
-                const meshId = highlightText(item['Mesh ID'] || '未知', searchId.value);
-                const hmdbId = highlightText(item['Metabolite ID'] || '未知', searchId.value);
-                html += `
-                    <div class="result-item fade-in" style="animation-delay: ${index * 0.05}s">
-                        <div class="result-header">
-                            <h3 class="result-title"><i class="fas fa-disease"></i> ${diseaseName}</h3>
-                        </div>
-                        <div class="result-content">
-                            <div class="result-row">
-                                <span class="result-label"><i class="fas fa-barcode"></i> Mesh ID</span>
-                                <span class="result-value">${meshId}</span>
-                            </div>
-                            <div class="result-row">
-                                <span class="result-label"><i class="fas fa-atom"></i> 代谢物</span>
-                                <span class="result-value">${metaboliteName}</span>
-                            </div>
-                            <div class="result-row">
-                                <span class="result-label"><i class="fas fa-dna"></i> HMDB ID</span>
-                                <span class="result-value">${hmdbId}</span>
-                            </div>
-                        </div>
-                        <div class="result-footer">
-                            <a href="javascript:void(0)" class="result-link" onclick='showDetailModal(${JSON.stringify(item)})'>查看详情 <i class="fas fa-chevron-right"></i></a>
-                            <span><i class="fas fa-calendar-alt"></i> ${new Date().toLocaleDateString()}</span>
-                        </div>
+            const selectedMetabolite = metaboliteSelect.value;
+            const selectedDisease = diseaseSelect.value;
+            
+            if (!selectedMetabolite && !selectedDisease) {
+                alert('Please select a metabolite or disease');
+                return;
+            }
+            
+            let results = [];
+            let searchType = '';
+            let query = '';
+            
+            if (selectedMetabolite && selectedDisease) {
+                // 同时选择了代谢物和疾病
+                results = performSearch(selectedMetabolite, 'metabolite').filter(item => 
+                    item['Disease Name'] === selectedDisease
+                );
+                searchType = 'both';
+                query = `${selectedMetabolite} + ${selectedDisease}`;
+            } else if (selectedMetabolite) {
+                // 只选择了代谢物
+                results = performSearch(selectedMetabolite, 'metabolite');
+                searchType = 'metabolite';
+                query = selectedMetabolite;
+            } else {
+                // 只选择了疾病
+                results = performSearch(selectedDisease, 'disease');
+                searchType = 'disease';
+                query = selectedDisease;
+            }
+            
+            displayResults(results, searchType, query);
+        }
+
+        // 显示结果
+        function displayResults(results, searchType, query) {
+            const container = document.getElementById('results-container');
+            const resultsCard = document.getElementById('results-card');
+            const resultsCount = document.getElementById('results-count');
+            const resultsActions = document.getElementById('results-actions');
+
+            if (results.length === 0) {
+                container.innerHTML = `
+                    <div class="no-results">
+                        <i class="fas fa-search"></i>
+                        <h3>No results found</h3>
+                        <p>Please try different keywords or check your spelling</p>
                     </div>
                 `;
-            });
-            
-            resultsContainer.innerHTML = html;
-        }
-        
-        // 更新图表
-        function updateCharts(results) {
-            if (results.length === 0) return;
-            
-            // 按疾病分组统计
-            const diseaseMap = {};
-            results.forEach(item => {
-                const disease = item['Disease Name'] || '未知疾病';
-                diseaseMap[disease] = (diseaseMap[disease] || 0) + 1;
-            });
-            
-            // 按代谢物分组统计
-            const metaboliteMap = {};
-            results.forEach(item => {
-                const metabolite = item['Metabolite Name'] || '未知代谢物';
-                metaboliteMap[metabolite] = (metaboliteMap[metabolite] || 0) + 1;
-            });
-            
-            // 准备图表数据
-            const diseaseData = Object.entries(diseaseMap)
-                .sort((a, b) => b[1] - a[1])
-                .slice(0, 10);
+            } else {
+                // 显示结果弹窗
+                resultsCard.style.display = 'flex';
                 
-            const metaboliteData = Object.entries(metaboliteMap)
-                .sort((a, b) => b[1] - a[1])
-                .slice(0, 10);
-            
-            // 配置图表选项
-            const option = {
-                tooltip: {
-                    trigger: 'axis',
-                    axisPointer: {
-                        type: 'shadow'
+                // 更新结果计数
+                resultsCount.textContent = `Found ${results.length} results`;
+                
+                // 显示操作按钮
+                resultsActions.style.display = 'flex';
+                
+                // 生成结果HTML
+                let resultsHTML = '';
+                
+                if (searchType === 'all') {
+                    // 分组显示疾病和代谢物结果
+                    const diseaseResults = results.filter(item => item['Disease Name'].toLowerCase().includes(query.toLowerCase()));
+                    const metaboliteResults = results.filter(item => item['Metabolite Name'].toLowerCase().includes(query.toLowerCase()));
+                    
+                    if (diseaseResults.length > 0) {
+                        resultsHTML += `
+                            <div class="result-group">
+                                <div class="result-group-header">
+                                    <i class="fas fa-disease"></i> Related Diseases (${diseaseResults.length})
+                                </div>
+                                <ul class="result-list">
+                                    ${diseaseResults.map(item => createResultItem(item, 'disease')).join('')}
+                                </ul>
+                            </div>
+                        `;
                     }
-                },
-                legend: {
-                    data: ['疾病分布', '代谢物分布']
-                },
-                grid: {
-                    left: '3%',
-                    right: '4%',
-                    bottom: '3%',
-                    containLabel: true
-                },
-                xAxis: {
-                    type: 'value'
-                },
-                yAxis: {
-                    type: 'category',
-                    data: diseaseData.map(item => item[0])
-                },
-                series: [
-                    {
-                        name: '疾病分布',
-                        type: 'bar',
-                        data: diseaseData.map(item => item[1]),
-                        itemStyle: {
-                            color: '#4361ee'
-                        }
-                    },
-                    {
-                        name: '代谢物分布',
-                        type: 'bar',
-                        data: metaboliteData.map(item => item[1]),
-                        itemStyle: {
-                            color: '#4cc9f0'
-                        }
+                    
+                    if (metaboliteResults.length > 0) {
+                        resultsHTML += `
+                            <div class="result-group">
+                                <div class="result-group-header">
+                                    <i class="fas fa-atom"></i> Related Metabolites (${metaboliteResults.length})
+                                </div>
+                                <ul class="result-list">
+                                    ${metaboliteResults.map(item => createResultItem(item, 'metabolite')).join('')}
+                                </ul>
+                            </div>
+                        `;
                     }
-                ]
-            };
-            
-            // 设置图表选项
-            chartInstance.setOption(option);
-            
-            // 响应式调整
-            window.addEventListener('resize', function() {
-                chartInstance.resize();
-            });
+                } else {
+                    // 单一类型结果
+                    const groupTitle = searchType === 'disease' ? 'Related Diseases' : 'Related Metabolites';
+                    const groupIcon = searchType === 'disease' ? 'fas fa-disease' : 'fas fa-atom';
+                    
+                    resultsHTML = `
+                        <div class="result-group">
+                            <div class="result-group-header">
+                                <i class="${groupIcon}"></i> ${groupTitle} (${results.length})
+                            </div>
+                            <ul class="result-list">
+                                ${results.map(item => createResultItem(item, searchType)).join('')}
+                            </ul>
+                        </div>
+                    `;
+                }
+                
+                container.innerHTML = resultsHTML;
+            }
         }
-        
+
+        // 按疾病分组
+        function groupByDisease(results) {
+            const groups = {};
+            results.forEach(item => {
+                const key = `${item['Disease Name']}|${item['Mesh ID']}`;
+                if (!groups[key]) {
+                    groups[key] = {
+                        diseaseName: item['Disease Name'],
+                        meshId: item['Mesh ID'],
+                        metabolites: []
+                    };
+                }
+                groups[key].metabolites.push({
+                    name: item['Metabolite Name'],
+                    id: item['Metabolite ID']
+                });
+            });
+            return Object.values(groups);
+        }
+
+        // 按代谢物分组
+        function groupByMetabolite(results) {
+            const groups = {};
+            results.forEach(item => {
+                const key = `${item['Metabolite Name']}|${item['Metabolite ID']}`;
+                if (!groups[key]) {
+                    groups[key] = {
+                        metaboliteName: item['Metabolite Name'],
+                        metaboliteId: item['Metabolite ID'],
+                        diseases: []
+                    };
+                }
+                groups[key].diseases.push({
+                    name: item['Disease Name'],
+                    id: item['Mesh ID']
+                });
+            });
+            return Object.values(groups);
+        }
+
+        // 创建疾病表格
+        function createDiseaseTable(diseaseGroups) {
+            let html = `
+                <table class="results-table">
+                    <thead>
+                        <tr>
+                            <th>Disease Name</th>
+                            <th>Mesh ID</th>
+                            <th>Associated Metabolites</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+            `;
+
+            diseaseGroups.forEach(group => {
+                const metabolitesList = group.metabolites.map(m => 
+                    `<div>${m.name} <span class="id-cell">${m.id}</span></div>`
+                ).join('');
+
+                html += `
+                    <tr>
+                        <td><strong>${group.diseaseName}</strong></td>
+                        <td><span class="id-cell">${group.meshId}</span></td>
+                        <td>${metabolitesList}</td>
+                    </tr>
+                `;
+            });
+
+            html += '</tbody></table>';
+            return html;
+        }
+
+        // 创建代谢物表格
+        function createMetaboliteTable(metaboliteGroups) {
+            let html = `
+                <table class="results-table">
+                    <thead>
+                        <tr>
+                            <th>Metabolite Name</th>
+                            <th>HMDB ID</th>
+                            <th>Associated Diseases</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+            `;
+
+            metaboliteGroups.forEach(group => {
+                const diseasesList = group.diseases.map(d => 
+                    `<div>${d.name} <span class="id-cell">${d.id}</span></div>`
+                ).join('');
+
+                html += `
+                    <tr>
+                        <td><strong>${group.metaboliteName}</strong></td>
+                        <td><span class="id-cell">${group.metaboliteId}</span></td>
+                        <td>${diseasesList}</td>
+                    </tr>
+                `;
+            });
+
+            html += '</tbody></table>';
+            return html;
+        }
+
+        // 创建同时选择代谢物和疾病的表格
+        function createBothTable(results) {
+            if (results.length === 0) {
+                return '<div class="no-results"><h3>No association found between the selected metabolite and disease</h3></div>';
+            }
+
+            let html = `
+                <table class="results-table">
+                    <thead>
+                        <tr>
+                            <th>Metabolite Name</th>
+                            <th>HMDB ID</th>
+                            <th>Disease Name</th>
+                            <th>Mesh ID</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+            `;
+
+            results.forEach(item => {
+                html += `
+                    <tr>
+                        <td><strong>${item['Metabolite Name']}</strong></td>
+                        <td><span class="id-cell">${item['Metabolite ID']}</span></td>
+                        <td><strong>${item['Disease Name']}</strong></td>
+                        <td><span class="id-cell">${item['Mesh ID']}</span></td>
+                    </tr>
+                `;
+            });
+
+            html += '</tbody></table>';
+            return html;
+        }
+
+        // 显示加载状态
+        function showLoading() {
+            const container = document.getElementById('results-container');
+            container.innerHTML = `
+                <div class="loading">
+                    <div class="spinner"></div>
+                    <p>Searching...</p>
+                </div>
+            `;
+        }
+
         // 显示错误信息
         function showError(message) {
-            resultsContainer.innerHTML = `
-                <div class="empty-state">
-                    <i class="fas fa-exclamation-circle"></i>
-                    <h3>发生错误</h3>
+            const container = document.getElementById('results-container');
+            container.innerHTML = `
+                <div class="no-results">
+                    <h3>Error</h3>
                     <p>${message}</p>
-                    <button class="btn" onclick="loadData()"><i class="fas fa-sync-alt"></i> 重试</button>
                 </div>
             `;
-            resultCount.innerHTML = `<i class="fas fa-exclamation-triangle"></i> 数据加载失败`;
         }
-        
-        // 重置搜索
-        function resetSearch() {
-            searchInput.value = '';
-            searchId.value = '';
-            diseaseFilter.value = '';
-            metaboliteFilter.value = '';
-            sortBy.value = 'relevance';
-            performSearch();
+
+        // 清空结果
+        function clearResults() {
+            const container = document.getElementById('results-container');
+            const countElement = document.getElementById('results-count');
+            const resultsActions = document.getElementById('results-actions');
+
+            container.innerHTML = `
+                <div class="no-results">
+                    <h3><i class="fas fa-database"></i> Welcome to Disease-Metabolite Association Query System</h3>
+                    <p>Please enter a metabolite or disease name/ID in the search box to start searching, or use the dropdown to browse all available metabolites and diseases</p>
+                </div>
+            `;
+            countElement.textContent = '';
+            resultsActions.style.display = 'none';
+            currentResults = [];
         }
-        
-        // 高亮文本
-        function highlightText(text, term) {
-            if (!term || !text) return text;
-            const escapedTerm = term.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-            const regex = new RegExp(`(${escapedTerm})`, 'gi');
-            return text.replace(regex, '<span class="highlight">$1</span>');
-        }
-        
-        // 事件监听器
-        searchButton.addEventListener('click', performSearch);
-        searchInput.addEventListener('keyup', function(e) {
-            if (e.key === 'Enter') performSearch();
-        });
-        searchId.addEventListener('keyup', function(e) {
-            if (e.key === 'Enter') performSearch();
-        });
-        diseaseFilter.addEventListener('change', performSearch);
-        metaboliteFilter.addEventListener('change', performSearch);
-        sortBy.addEventListener('change', performSearch);
-        
-        // 高级筛选区重置按钮绑定
-        const filterResetBtn = document.querySelector('.card-actions .btn.btn-outline');
-        if (filterResetBtn) filterResetBtn.addEventListener('click', resetSearch);
-        
-        // 标签云点击事件，按标签筛选
-        let tagFilter = '';
-        diseaseTags.addEventListener('click', function(e) {
-            if (e.target.classList.contains('tag')) {
-                document.querySelectorAll('.tag').forEach(tag => {
-                    tag.classList.remove('active');
-                });
-                e.target.classList.add('active');
-                tagFilter = e.target.textContent.trim();
-                performSearch();
+
+        // 导出结果
+        function exportResults() {
+            if (currentResults.length === 0) {
+                alert('No results to export');
+                return;
             }
-        });
-        
-        // 数据概览卡片导出按钮绑定，导出全部数据
-        const overviewExportBtn = document.querySelector('.card .card-actions .btn-outline');
-        if (overviewExportBtn) overviewExportBtn.addEventListener('click', function() {
-            if (!allData.length) return alert('没有可导出的数据');
-            const header = Object.keys(allData[0]);
-            const csv = [
-                header.join(','),
-                ...allData.map(row => header.map(h => `"${(row[h]||'').replace(/"/g,'""')}"`).join(','))
-            ].join('\n');
-            const blob = new Blob([csv], {type: 'text/csv'});
+
+            const csvContent = convertToCSV(currentResults);
+            const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+            const link = document.createElement('a');
             const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url; a.download = 'all_data.csv'; a.click();
-            URL.revokeObjectURL(url);
-        });
-        
-        // 初始化
-        document.addEventListener('DOMContentLoaded', function() {
-            // 加载数据
-            loadData();
+            link.setAttribute('href', url);
+            link.setAttribute('download', 'disease_metabolite_associations.csv');
+            link.style.visibility = 'hidden';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+
+        // 转换为CSV格式
+        function convertToCSV(data) {
+            const headers = ['Disease Name', 'Mesh ID', 'Metabolite Name', 'Metabolite ID'];
+            const csvRows = [headers.join(',')];
             
-            // 随机示例按钮
-            document.querySelector('.empty-state .btn')?.addEventListener('click', function() {
-                searchInput.value = ['癌症', '糖尿病', '心脏病', '阿尔茨海默'][Math.floor(Math.random() * 4)];
-                performSearch();
+            data.forEach(item => {
+                const row = [
+                    `"${item['Disease Name']}"`,
+                    `"${item['Mesh ID']}"`,
+                    `"${item['Metabolite Name']}"`,
+                    `"${item['Metabolite ID']}"`
+                ];
+                csvRows.push(row.join(','));
+            });
+            
+            return csvRows.join('\n');
+        }
+
+        // 新增功能函数
+        function showAnalytics() {
+            document.getElementById('analytics-panel').style.display = 'flex';
+            generateAnalytics();
+        }
+
+        function hideAnalytics() {
+            document.getElementById('analytics-panel').style.display = 'none';
+        }
+
+        function showNetwork() {
+            document.getElementById('network-panel').style.display = 'flex';
+            generateNetwork();
+        }
+
+        function hideNetwork() {
+            document.getElementById('network-panel').style.display = 'none';
+        }
+
+        function showAdvancedSearch() {
+            document.getElementById('advanced-search-panel').style.display = 'flex';
+        }
+
+        function hideAdvancedSearch() {
+            document.getElementById('advanced-search-panel').style.display = 'none';
+        }
+
+        function generateAnalytics() {
+            if (!currentResults || currentResults.length === 0) return;
+
+            // 生成热门代谢物列表
+            const metaboliteCounts = {};
+            currentResults.forEach(item => {
+                const name = item['Metabolite Name'];
+                metaboliteCounts[name] = (metaboliteCounts[name] || 0) + 1;
             });
 
-            // 导出结果按钮
-            document.querySelector('.result-actions .btn-outline').addEventListener('click', exportResultsToCSV);
+            const topMetabolites = Object.entries(metaboliteCounts)
+                .sort(([,a], [,b]) => b - a)
+                .slice(0, 10);
+
+            const topMetabolitesHTML = topMetabolites.map(([name, count]) => `
+                <div class="list-item">
+                    <span class="name">${name}</span>
+                    <span class="count">${count}</span>
+                </div>
+            `).join('');
+
+            document.getElementById('top-metabolites').innerHTML = topMetabolitesHTML;
+
+            // 生成热门疾病列表
+            const diseaseCounts = {};
+            currentResults.forEach(item => {
+                const name = item['Disease Name'];
+                diseaseCounts[name] = (diseaseCounts[name] || 0) + 1;
+            });
+
+            const topDiseases = Object.entries(diseaseCounts)
+                .sort(([,a], [,b]) => b - a)
+                .slice(0, 10);
+
+            const topDiseasesHTML = topDiseases.map(([name, count]) => `
+                <div class="list-item">
+                    <span class="name">${name}</span>
+                    <span class="count">${count}</span>
+                </div>
+            `).join('');
+
+            document.getElementById('top-diseases').innerHTML = topDiseasesHTML;
+
+            // 生成统计摘要
+            const uniqueMetabolites = new Set(currentResults.map(item => item['Metabolite Name'])).size;
+            const uniqueDiseases = new Set(currentResults.map(item => item['Disease Name'])).size;
+            const avgAssociationsPerMetabolite = (currentResults.length / uniqueMetabolites).toFixed(1);
+            const avgAssociationsPerDisease = (currentResults.length / uniqueDiseases).toFixed(1);
+
+            const statsHTML = `
+                <div class="stat-box">
+                    <span class="number">${uniqueMetabolites}</span>
+                    <span class="label">Unique Metabolites</span>
+                </div>
+                <div class="stat-box">
+                    <span class="number">${uniqueDiseases}</span>
+                    <span class="label">Unique Diseases</span>
+                </div>
+                <div class="stat-box">
+                    <span class="number">${avgAssociationsPerMetabolite}</span>
+                    <span class="label">Avg. Associations/Metabolite</span>
+                </div>
+                <div class="stat-box">
+                    <span class="number">${avgAssociationsPerDisease}</span>
+                    <span class="label">Avg. Associations/Disease</span>
+                </div>
+            `;
+
+            document.getElementById('stats-summary').innerHTML = statsHTML;
+
+            // 生成关联分布图表（简化版）
+            const chartHTML = `
+                <div style="text-align: center; padding: var(--space-5);">
+                    <div style="font-size: 3rem; color: var(--accent-500); margin-bottom: var(--space-3);">
+                        <i class="fas fa-chart-pie"></i>
+                    </div>
+                    <div style="font-size: 1.125rem; font-weight: 600; color: var(--text-800);">
+                        Association Distribution Analysis
+                    </div>
+                    <div style="font-size: 0.875rem; color: var(--text-600); margin-top: var(--space-3);">
+                        Total ${currentResults.length} association records<br>
+                        Involving ${uniqueMetabolites} metabolites and ${uniqueDiseases} diseases
+                    </div>
+                </div>
+            `;
+
+            document.getElementById('association-chart').innerHTML = chartHTML;
+        }
+
+        function generateNetwork() {
+            if (!currentResults || currentResults.length === 0) return;
+            const container = document.getElementById('network-container');
+            container.innerHTML = ''; // Clear
+
+            // Build nodes and edges
+            const nodes = [];
+            const edges = [];
+            const nodeIds = new Set();
+
+            currentResults.forEach(item => {
+                // Disease node
+                if (!nodeIds.has(item['Disease Name'])) {
+                    nodes.push({
+                        id: 'd_' + item['Disease Name'],
+                        label: item['Disease Name'],
+                        group: 'disease'
+                    });
+                    nodeIds.add(item['Disease Name']);
+                }
+                // Metabolite node
+                if (!nodeIds.has(item['Metabolite Name'])) {
+                    nodes.push({
+                        id: 'm_' + item['Metabolite Name'],
+                        label: item['Metabolite Name'],
+                        group: 'metabolite'
+                    });
+                    nodeIds.add(item['Metabolite Name']);
+                }
+                // Edge
+                edges.push({
+                    from: 'd_' + item['Disease Name'],
+                    to: 'm_' + item['Metabolite Name']
+                });
+            });
+
+            // vis-network config
+            const data = { nodes: new vis.DataSet(nodes), edges: new vis.DataSet(edges) };
+            const options = {
+                nodes: {
+                    shape: 'dot',
+                    size: 18,
+                    font: { size: 16 }
+                },
+                groups: {
+                    disease: { color: { background: '#3b82f6' }, borderWidth: 2 },
+                    metabolite: { color: { background: '#10b981' }, borderWidth: 2 }
+                },
+                edges: { color: '#aaa' },
+                physics: { stabilization: false }
+            };
+            new vis.Network(container, data, options);
+        }
+
+        function resetNetwork() {
+            generateNetwork();
+        }
+
+        function exportNetwork() {
+            alert('Network export feature requires integration with a professional visualization library');
+        }
+
+        function applyAdvancedFilters() {
+            const strengthFilter = document.getElementById('strength-filter').value;
+            const diseaseTypeFilter = document.getElementById('disease-type-filter').value;
+            const metaboliteCategoryFilter = document.getElementById('metabolite-category-filter').value;
+
+            // More complex filter logic can be implemented here
+            alert('Advanced filter applied (demo feature)');
+            hideAdvancedSearch();
+        }
+
+        function clearAdvancedFilters() {
+            document.getElementById('strength-filter').value = '';
+            document.getElementById('disease-type-filter').value = '';
+            document.getElementById('metabolite-category-filter').value = '';
+        }
+
+        // 回车键搜索
+        document.getElementById('search-input').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                searchAll();
+            }
         });
 
-        // 统计总览
-        function updateStatsOverview() {
-            document.getElementById('stats-overview').innerHTML = `
-                <span>疾病数: <b>${uniqueDiseases.length}</b></span>
-                <span>代谢物数: <b>${uniqueMetabolites.length}</b></span>
-                <span>关联数: <b>${allData.length}</b></span>
-            `;
+        // 页面加载时初始化
+        window.addEventListener('load', loadData);
+
+        function closeResults() {
+            document.getElementById('results-card').style.display = 'none';
         }
 
-        // 详情弹窗
-        function showDetailModal(item) {
-            const modal = document.createElement('div');
-            modal.className = 'modal';
-            modal.innerHTML = `
-                <div class="modal-content">
-                    <span class="modal-close" onclick="this.parentNode.parentNode.remove()">&times;</span>
-                    <h2>${item['Disease Name']} - ${item['Metabolite Name']}</h2>
-                    <p><b>Mesh ID:</b> ${item['Mesh ID'] || '未知'}</p>
-                    <p><b>HMDB ID:</b> ${item['Metabolite ID'] || '未知'}</p>
-                    <p><b>趋势:</b> ${item['Trend'] || '未知'}</p>
-                    <p><b>文献:</b> ${item['Reference'] || '无'}</p>
-                </div>
-            `;
-            // 点击遮罩关闭
-            modal.addEventListener('click', function(e) {
-                if (e.target === modal) modal.remove();
-            });
-            document.body.appendChild(modal);
-        }
-
-        // 联系我们弹窗
-        function showContactModal() {
-            const modal = document.createElement('div');
-            modal.className = 'modal';
-            modal.innerHTML = `
-                <div class="modal-content">
-                    <span class="modal-close" onclick="this.parentNode.parentNode.remove()">&times;</span>
-                    <h2><i class="fas fa-envelope"></i> 联系我们</h2>
-                    <div style="margin: 1.5rem 0;">
-                        <p style="margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem;">
-                            <i class="fas fa-envelope" style="color: var(--primary-color);"></i>
-                            <strong>邮箱：</strong> 
-                            <a href="mailto:lupengli88@163.com" style="color: var(--primary-color); text-decoration: none;">lupengli88@163.com</a>
-                        </p>
-                        <p style="margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem;">
-                            <i class="fas fa-university" style="color: var(--primary-color);"></i>
-                            <strong>机构：</strong> School of Computer and Communication, Lanzhou University of Technology
-                        </p>
-                        <p style="margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem;">
-                            <i class="fas fa-map-marker-alt" style="color: var(--primary-color);"></i>
-                            <strong>地址：</strong> Lanzhou, Gansu, China
-                        </p>
-                        <p style="margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem;">
-                            <i class="fas fa-mail-bulk" style="color: var(--primary-color);"></i>
-                            <strong>邮编：</strong> 730050
-                        </p>
-                        <p style="margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem;">
-                            <i class="fas fa-clock" style="color: var(--primary-color);"></i>
-                            <strong>工作时间：</strong> 周一至周五 9:00-18:00
-                        </p>
-                    </div>
-                    <div style="text-align: center; margin-top: 1.5rem;">
-                        <button class="btn" onclick="window.open('mailto:lupengli88@163.com')">
-                            <i class="fas fa-envelope"></i> 发送邮件
-                        </button>
-                    </div>
-                </div>
-            `;
-            // 点击遮罩关闭
-            modal.addEventListener('click', function(e) {
-                if (e.target === modal) modal.remove();
-            });
-            document.body.appendChild(modal);
-        }
-
-        // 导出CSV
-        function exportResultsToCSV() {
-            if (!currentResults.length) return alert('没有可导出的数据');
-            const header = Object.keys(currentResults[0]);
-            const csv = [
-                header.join(','),
-                ...currentResults.map(row => header.map(h => `"${(row[h]||'').replace(/"/g,'""')}"`).join(','))
-            ].join('\n');
-            const blob = new Blob([csv], {type: 'text/csv'});
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url; a.download = 'results.csv'; a.click();
-            URL.revokeObjectURL(url);
-        }
-
-        // 骨架屏
-        function showSkeleton(count = 6) {
-            let html = '';
-            for(let i=0;i<count;i++) {
-                html += `<div class="result-item skeleton" style="height:180px;margin-bottom:1.5rem;"></div>`;
+        function createResultItem(item, type) {
+            const diseaseName = item['Disease Name'];
+            const diseaseId = item['Mesh ID'];
+            const metaboliteName = item['Metabolite Name'];
+            const metaboliteId = item['Metabolite ID'];
+            
+            if (type === 'disease') {
+                return `
+                    <li class="result-item">
+                        <div class="result-title">
+                            <i class="fas fa-disease"></i> ${diseaseName}
+                            <span class="result-id">${diseaseId}</span>
+                        </div>
+                        <div class="result-details">
+                            <div class="detail-item">
+                                <span class="detail-label">Related Metabolite</span>
+                                <span class="detail-value">${metaboliteName}</span>
+                            </div>
+                            <div class="detail-item">
+                                <span class="detail-label">Metabolite ID</span>
+                                <span class="detail-value">${metaboliteId}</span>
+                            </div>
+                        </div>
+                    </li>
+                `;
+            } else {
+                return `
+                    <li class="result-item">
+                        <div class="result-title">
+                            <i class="fas fa-atom"></i> ${metaboliteName}
+                            <span class="result-id">${metaboliteId}</span>
+                        </div>
+                        <div class="result-details">
+                            <div class="detail-item">
+                                <span class="detail-label">Related Disease</span>
+                                <span class="detail-value">${diseaseName}</span>
+                            </div>
+                            <div class="detail-item">
+                                <span class="detail-label">Disease ID</span>
+                                <span class="detail-value">${diseaseId}</span>
+                            </div>
+                        </div>
+                    </li>
+                `;
             }
-            resultsContainer.innerHTML = html;
         }
 
-        // 分页控件渲染
-        function updatePagination() {
-            let html = '';
-            if (totalPages > 1) {
-                html += '<div class="pagination">';
-                html += `<button class="page-btn" ${currentPage===1?'disabled':''} onclick="gotoPage(${currentPage-1})">上一页</button>`;
-                // 页码显示（最多显示7个页码，前后省略号）
-                let start = Math.max(1, currentPage-3);
-                let end = Math.min(totalPages, currentPage+3);
-                if (start > 1) html += '<span class="page-ellipsis">...</span>';
-                for (let i = start; i <= end; i++) {
-                    html += `<button class="page-btn${i===currentPage?' active':''}" onclick="gotoPage(${i})">${i}</button>`;
-                }
-                if (end < totalPages) html += '<span class="page-ellipsis">...</span>';
-                html += `<button class="page-btn" ${currentPage===totalPages?'disabled':''} onclick="gotoPage(${currentPage+1})">下一页</button>`;
-                html += '</div>';
+        function performSearch(query, searchType) {
+            const searchTerm = query.toLowerCase();
+            let results = [];
+            
+            if (searchType === 'all') {
+                // 搜索所有类型
+                results = data.filter(item => {
+                    const metaboliteName = item['Metabolite Name'].toLowerCase();
+                    const metaboliteId = item['Metabolite ID'].toLowerCase();
+                    const diseaseName = item['Disease Name'].toLowerCase();
+                    const meshId = item['Mesh ID'].toLowerCase();
+                    
+                    return metaboliteName.includes(searchTerm) || 
+                           metaboliteId.includes(searchTerm) ||
+                           diseaseName.includes(searchTerm) || 
+                           meshId.includes(searchTerm);
+                });
+            } else if (searchType === 'metabolite') {
+                // 只搜索代谢物
+                results = data.filter(item => {
+                    const metaboliteName = item['Metabolite Name'].toLowerCase();
+                    const metaboliteId = item['Metabolite ID'].toLowerCase();
+                    
+                    return metaboliteName.includes(searchTerm) || metaboliteId.includes(searchTerm);
+                });
+            } else if (searchType === 'disease') {
+                // 只搜索疾病
+                results = data.filter(item => {
+                    const diseaseName = item['Disease Name'].toLowerCase();
+                    const meshId = item['Mesh ID'].toLowerCase();
+                    
+                    return diseaseName.includes(searchTerm) || meshId.includes(searchTerm);
+                });
             }
-            document.getElementById('pagination-container').innerHTML = html;
+            
+            // 设置当前结果
+            currentResults = results;
+            return results;
         }
-
-        // 跳转页码
-        window.gotoPage = function(page) {
-            if (page < 1 || page > totalPages) return;
-            currentPage = page;
-            performSearch();
-        }
-
-        // 语言包
-        const i18n = {
-            zh: {
-                navTitle: '代谢组学分析平台',
-                navHome: '首页',
-                navData: '数据源',
-                navTools: '分析工具',
-                navDoc: '文档',
-                navContact: '联系我们',
-                heroTitle: '代谢物与疾病关联可视化分析',
-                heroSubtitle: '探索疾病与代谢物之间的复杂关系网络，发现潜在的生物标志物',
-                searchLabel: '关键词搜索',
-                searchPlaceholder: '输入疾病或代谢物名称...',
-                searchType: '搜索类型',
-                searchTypeAll: '全部类型',
-                searchTypeDisease: '仅疾病',
-                searchTypeMetabolite: '仅代谢物',
-                searchId: '标识符',
-                searchIdPlaceholder: 'Mesh ID / HMDB ID...',
-                searchBtn: '搜索',
-                filterTitle: '高级筛选',
-                filterReset: '重置',
-                filterDisease: '按疾病筛选',
-                filterMetabolite: '按代谢物筛选',
-                filterSort: '排序方式',
-                sortRelevance: '相关性',
-                sortDiseaseAsc: '疾病名称 (A-Z)',
-                sortDiseaseDesc: '疾病名称 (Z-A)',
-                sortMetaboliteAsc: '代谢物名称 (A-Z)',
-                sortMetaboliteDesc: '代谢物名称 (Z-A)',
-                tagAll: '全部',
-                tag1: '心血管疾病', tag2: '神经系统疾病', tag3: '代谢性疾病', tag4: '癌症', tag5: '遗传性疾病',
-                chartTitle: '数据概览',
-                chartExport: '导出',
-                statsDisease: '疾病数',
-                statsMetabolite: '代谢物数',
-                statsAssoc: '关联数',
-                resultReady: '准备搜索...',
-                resultFound: n => `找到 ${n} 条结果`,
-                resultNone: '没有找到匹配的结果',
-                resultNoneTip: '请尝试修改搜索条件或筛选条件',
-                resultReset: '重置搜索',
-                resultExport: '导出结果',
-                resultShare: '分享',
-                resultSeeExample: '查看随机示例',
-                resultDetail: '查看详情',
-                resultDate: () => new Date().toLocaleDateString(),
-                resultMesh: 'Mesh ID',
-                resultMetabolite: '代谢物',
-                resultHMDB: 'HMDB ID',
-                emptyStart: '开始您的探索之旅',
-                emptyTip: '输入搜索条件或使用筛选器来查找疾病与代谢物之间的关联关系',
-                errorTitle: '发生错误',
-                errorRetry: '重试',
-                footerAbout: '关于平台',
-                footerIntro: '平台简介',
-                footerDoc: '使用文档',
-                footerNews: '最新动态',
-                footerFAQ: '常见问题',
-                footerData: '数据资源',
-                footerSource: '数据来源',
-                footerSubmit: '数据提交',
-                footerStat: '统计分析',
-                footerNet: '网络分析',
-                footerContact: '联系我们',
-                footerEmail: '电子邮件',
-                footerPhone: '联系电话',
-                footerAddr: '实验室地址',
-                footerJoin: '加入我们',
-                footerCopyright: '2023 代谢组学分析平台 | 生物信息学研究中心 | 所有权利保留',
-                modalTrend: '趋势',
-                modalRef: '文献',
-                modalClose: '关闭',
-                pagePrev: '上一页',
-                pageNext: '下一页',
-            },
-            en: {
-                navTitle: 'Metabolomics Analysis Platform',
-                navHome: 'Home',
-                navData: 'Data',
-                navTools: 'Tools',
-                navDoc: 'Docs',
-                navContact: 'Contact',
-                heroTitle: 'Metabolite-Disease Association Visualization',
-                heroSubtitle: 'Explore the complex network between diseases and metabolites, discover potential biomarkers',
-                searchLabel: 'Keyword Search',
-                searchPlaceholder: 'Enter disease or metabolite name...',
-                searchType: 'Search Type',
-                searchTypeAll: 'All',
-                searchTypeDisease: 'Disease Only',
-                searchTypeMetabolite: 'Metabolite Only',
-                searchId: 'Identifier',
-                searchIdPlaceholder: 'Mesh ID / HMDB ID...',
-                searchBtn: 'Search',
-                filterTitle: 'Advanced Filter',
-                filterReset: 'Reset',
-                filterDisease: 'Filter by Disease',
-                filterMetabolite: 'Filter by Metabolite',
-                filterSort: 'Sort By',
-                sortRelevance: 'Relevance',
-                sortDiseaseAsc: 'Disease (A-Z)',
-                sortDiseaseDesc: 'Disease (Z-A)',
-                sortMetaboliteAsc: 'Metabolite (A-Z)',
-                sortMetaboliteDesc: 'Metabolite (Z-A)',
-                tagAll: 'All',
-                tag1: 'Cardiovascular', tag2: 'Neurological', tag3: 'Metabolic', tag4: 'Cancer', tag5: 'Genetic',
-                chartTitle: 'Data Overview',
-                chartExport: 'Export',
-                statsDisease: 'Diseases',
-                statsMetabolite: 'Metabolites',
-                statsAssoc: 'Associations',
-                resultReady: 'Ready to search...',
-                resultFound: n => `Found ${n} results`,
-                resultNone: 'No matching results',
-                resultNoneTip: 'Try changing your search or filter',
-                resultReset: 'Reset Search',
-                resultExport: 'Export',
-                resultShare: 'Share',
-                resultSeeExample: 'See Example',
-                resultDetail: 'Detail',
-                resultDate: () => new Date().toLocaleDateString(),
-                resultMesh: 'Mesh ID',
-                resultMetabolite: 'Metabolite',
-                resultHMDB: 'HMDB ID',
-                emptyStart: 'Start your exploration',
-                emptyTip: 'Enter search or use filters to find associations',
-                errorTitle: 'Error Occurred',
-                errorRetry: 'Retry',
-                footerAbout: 'About',
-                footerIntro: 'About',
-                footerDoc: 'Docs',
-                footerNews: 'News',
-                footerFAQ: 'FAQ',
-                footerData: 'Data',
-                footerSource: 'Source',
-                footerSubmit: 'Submit',
-                footerStat: 'Statistics',
-                footerNet: 'Network',
-                footerContact: 'Contact',
-                footerEmail: 'Email',
-                footerPhone: 'Phone',
-                footerAddr: 'Address',
-                footerJoin: 'Join Us',
-                footerCopyright: '2023 Metabolomics Platform | Bioinformatics Center | All rights reserved',
-                modalTrend: 'Trend',
-                modalRef: 'Reference',
-                modalClose: 'Close',
-                pagePrev: 'Prev',
-                pageNext: 'Next',
-            }
-        };
-        let lang = localStorage.getItem('lang') || 'zh';
-
-        function setLang(l) {
-            lang = l;
-            localStorage.setItem('lang', l);
-            const t = i18n[l];
-            // 顶部导航
-            document.getElementById('nav-title').textContent = t.navTitle;
-            document.getElementById('nav-home').innerHTML = '<i class="fas fa-home"></i> ' + t.navHome;
-            document.getElementById('nav-data').innerHTML = '<i class="fas fa-database"></i> ' + t.navData;
-            document.getElementById('nav-tools').innerHTML = '<i class="fas fa-chart-bar"></i> ' + t.navTools;
-            document.getElementById('nav-doc').innerHTML = '<i class="fas fa-book"></i> ' + t.navDoc;
-            document.getElementById('nav-contact').innerHTML = '<i class="fas fa-envelope"></i> ' + t.navContact;
-            // 英雄区
-            document.querySelector('.hero-content h1').textContent = t.heroTitle;
-            document.querySelector('.hero-content .subtitle').textContent = t.heroSubtitle;
-            document.querySelector('label[for="search-input"]').innerHTML = '<i class="fas fa-search"></i> ' + t.searchLabel;
-            document.getElementById('search-input').placeholder = t.searchPlaceholder;
-            document.querySelector('label[for="search-type"]').innerHTML = '<i class="fas fa-filter"></i> ' + t.searchType;
-            document.getElementById('search-type').options[0].text = t.searchTypeAll;
-            document.getElementById('search-type').options[1].text = t.searchTypeDisease;
-            document.getElementById('search-type').options[2].text = t.searchTypeMetabolite;
-            document.querySelector('label[for="search-id"]').innerHTML = '<i class="fas fa-barcode"></i> ' + t.searchId;
-            document.getElementById('search-id').placeholder = t.searchIdPlaceholder;
-            document.getElementById('search-button').innerHTML = '<i class="fas fa-search"></i> ' + t.searchBtn;
-            document.getElementById('example-btn').innerHTML = '<i class="fas fa-lightbulb"></i> ' + (lang==='zh'?'举例':'Example');
-            // 筛选卡片
-            document.querySelector('.card-title').innerHTML = '<i class="fas fa-sliders-h"></i> ' + t.filterTitle;
-            document.querySelector('.card-actions .btn-outline').innerHTML = '<i class="fas fa-sync-alt"></i> ' + t.filterReset;
-            document.querySelector('label[for="disease-filter"]').innerHTML = '<i class="fas fa-disease"></i> ' + t.filterDisease;
-            document.querySelector('label[for="metabolite-filter"]').innerHTML = '<i class="fas fa-atom"></i> ' + t.filterMetabolite;
-            document.querySelector('label[for="sort-by"]').innerHTML = '<i class="fas fa-sort"></i> ' + t.filterSort;
-            document.getElementById('sort-by').options[0].text = t.sortRelevance;
-            document.getElementById('sort-by').options[1].text = t.sortDiseaseAsc;
-            document.getElementById('sort-by').options[2].text = t.sortDiseaseDesc;
-            document.getElementById('sort-by').options[3].text = t.sortMetaboliteAsc;
-            document.getElementById('sort-by').options[4].text = t.sortMetaboliteDesc;
-            // 标签云
-            const tags = document.querySelectorAll('#disease-tags .tag');
-            if (tags.length >= 6) {
-                tags[0].textContent = t.tagAll;
-                tags[1].textContent = t.tag1;
-                tags[2].textContent = t.tag2;
-                tags[3].textContent = t.tag3;
-                tags[4].textContent = t.tag4;
-                tags[5].textContent = t.tag5;
-            }
-            // 图表卡片
-            document.querySelectorAll('.card-title')[1].innerHTML = '<i class="fas fa-chart-pie"></i> ' + t.chartTitle;
-            document.querySelectorAll('.card-actions .btn-outline')[1].innerHTML = '<i class="fas fa-download"></i> ' + t.chartExport;
-            // 统计总览
-            updateStatsOverview();
-            // 页脚
-            document.querySelectorAll('.footer-column h3')[0].textContent = t.footerAbout;
-            document.querySelectorAll('.footer-links li a')[0].innerHTML = '<i class="fas fa-info-circle"></i> ' + t.footerIntro;
-            document.querySelectorAll('.footer-links li a')[1].innerHTML = '<i class="fas fa-book"></i> ' + t.footerDoc;
-            document.querySelectorAll('.footer-links li a')[2].innerHTML = '<i class="fas fa-newspaper"></i> ' + t.footerNews;
-            document.querySelectorAll('.footer-links li a')[3].innerHTML = '<i class="fas fa-question-circle"></i> ' + t.footerFAQ;
-            document.querySelectorAll('.footer-column h3')[1].textContent = t.footerData;
-            document.querySelectorAll('.footer-links li a')[4].innerHTML = '<i class="fas fa-database"></i> ' + t.footerSource;
-            document.querySelectorAll('.footer-links li a')[5].innerHTML = '<i class="fas fa-upload"></i> ' + t.footerSubmit;
-            document.querySelectorAll('.footer-links li a')[6].innerHTML = '<i class="fas fa-chart-line"></i> ' + t.footerStat;
-            document.querySelectorAll('.footer-links li a')[7].innerHTML = '<i class="fas fa-project-diagram"></i> ' + t.footerNet;
-            document.querySelectorAll('.footer-column h3')[2].textContent = t.footerContact;
-            document.querySelectorAll('.footer-links li a')[8].innerHTML = '<i class="fas fa-envelope"></i> ' + t.footerEmail;
-            document.querySelectorAll('.footer-links li a')[9].innerHTML = '<i class="fas fa-phone"></i> ' + t.footerPhone;
-            document.querySelectorAll('.footer-links li a')[10].innerHTML = '<i class="fas fa-map-marker-alt"></i> ' + t.footerAddr;
-            document.querySelectorAll('.footer-links li a')[11].innerHTML = '<i class="fas fa-user-plus"></i> ' + t.footerJoin;
-            document.querySelector('.footer-bottom p').textContent = t.footerCopyright;
-            // 语言按钮样式
-            document.getElementById('lang-zh').className = l==='zh' ? 'btn btn-sm' : 'btn btn-outline btn-sm';
-            document.getElementById('lang-en').className = l==='en' ? 'btn btn-sm' : 'btn btn-outline btn-sm';
-            // 结果区、空状态、错误等动态内容在各自函数中切换
-        }
-
-        document.getElementById('lang-zh').onclick = function(){ setLang('zh'); performSearch(); };
-        document.getElementById('lang-en').onclick = function(){ setLang('en'); performSearch(); };
-
-        document.getElementById('example-btn').onclick = function() {
-            // 只从已加载的疾病和代谢物中随机选一个
-            if (!allData.length) return;
-            const diseases = uniqueDiseases;
-            const metabolites = uniqueMetabolites;
-            const pool = [...diseases, ...metabolites];
-            if (pool.length === 0) return;
-            const example = pool[Math.floor(Math.random()*pool.length)];
-            searchInput.value = example;
-            performSearch();
-        };
     </script>
 </body>
 </html>
