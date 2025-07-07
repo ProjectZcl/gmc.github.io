@@ -597,6 +597,11 @@
             margin-top: 3rem;
         }
 
+        .footer-links a:hover {
+            color: white !important;
+            transform: translateX(5px);
+        }
+
         .footer-content {
             max-width: 1400px;
             margin: 0 auto;
@@ -781,10 +786,8 @@
         </div>
         <div class="nav-links">
             <a href="#" id="nav-home"><i class="fas fa-home"></i> 首页</a>
-            <a href="#" id="nav-data"><i class="fas fa-database"></i> 数据源</a>
-            <a href="#" id="nav-tools"><i class="fas fa-chart-bar"></i> 分析工具</a>
-            <a href="#" id="nav-doc"><i class="fas fa-book"></i> 文档</a>
-            <a href="#" id="nav-contact"><i class="fas fa-envelope"></i> 联系我们</a>
+            <a href="https://hmdb.ca/" target="_blank" id="nav-data"><i class="fas fa-database"></i> 数据源</a>
+            <a href="javascript:void(0)" id="nav-contact" onclick="showContactModal()"><i class="fas fa-envelope"></i> 联系我们</a>
         </div>
         <div class="lang-switch" style="margin-left:2rem;">
             <button id="lang-zh" class="btn btn-sm" style="margin-right:0.5rem;">中文</button>
@@ -916,36 +919,26 @@
     <!-- 页脚 -->
     <footer>
         <div class="footer-content">
-            <div class="footer-column">
-                <h3>关于平台</h3>
-                <ul class="footer-links">
-                    <li><a href="#"><i class="fas fa-info-circle"></i> 平台简介</a></li>
-                    <li><a href="#"><i class="fas fa-book"></i> 使用文档</a></li>
-                    <li><a href="#"><i class="fas fa-newspaper"></i> 最新动态</a></li>
-                    <li><a href="#"><i class="fas fa-question-circle"></i> 常见问题</a></li>
-                </ul>
-            </div>
-            <div class="footer-column">
-                <h3>数据资源</h3>
-                <ul class="footer-links">
-                    <li><a href="#"><i class="fas fa-database"></i> 数据来源</a></li>
-                    <li><a href="#"><i class="fas fa-upload"></i> 数据提交</a></li>
-                    <li><a href="#"><i class="fas fa-chart-line"></i> 统计分析</a></li>
-                    <li><a href="#"><i class="fas fa-project-diagram"></i> 网络分析</a></li>
-                </ul>
-            </div>
-            <div class="footer-column">
+            <div class="footer-column" style="text-align: center; width: 100%;">
                 <h3>联系我们</h3>
-                <ul class="footer-links">
-                    <li><a href="#"><i class="fas fa-envelope"></i> 电子邮件</a></li>
-                    <li><a href="#"><i class="fas fa-phone"></i> 联系电话</a></li>
-                    <li><a href="#"><i class="fas fa-map-marker-alt"></i> 实验室地址</a></li>
-                    <li><a href="#"><i class="fas fa-user-plus"></i> 加入我们</a></li>
-                </ul>
+                <div class="footer-links" style="display: flex; justify-content: center; gap: 2rem; flex-wrap: wrap;">
+                    <a href="mailto:lupengli88@163.com" style="color: #aaa; text-decoration: none; transition: var(--transition); display: flex; align-items: center; gap: 0.5rem;">
+                        <i class="fas fa-envelope"></i> 电子邮件
+                    </a>
+                    <a href="javascript:void(0)" onclick="showContactModal()" style="color: #aaa; text-decoration: none; transition: var(--transition); display: flex; align-items: center; gap: 0.5rem;">
+                        <i class="fas fa-university"></i> 机构信息
+                    </a>
+                    <a href="javascript:void(0)" onclick="showContactModal()" style="color: #aaa; text-decoration: none; transition: var(--transition); display: flex; align-items: center; gap: 0.5rem;">
+                        <i class="fas fa-map-marker-alt"></i> 地址信息
+                    </a>
+                    <a href="javascript:void(0)" onclick="showContactModal()" style="color: #aaa; text-decoration: none; transition: var(--transition); display: flex; align-items: center; gap: 0.5rem;">
+                        <i class="fas fa-clock"></i> 工作时间
+                    </a>
+                </div>
             </div>
         </div>
         <div class="footer-bottom">
-            <p>&copy; 2023 代谢组学分析平台 | 生物信息学研究中心 | 所有权利保留</p>
+            <p>&copy; 2023 代谢组学分析平台 | School of Computer and Communication, Lanzhou University of Technology | 所有权利保留</p>
         </div>
     </footer>
 
@@ -1349,6 +1342,51 @@
                     <p><b>HMDB ID:</b> ${item['Metabolite ID'] || '未知'}</p>
                     <p><b>趋势:</b> ${item['Trend'] || '未知'}</p>
                     <p><b>文献:</b> ${item['Reference'] || '无'}</p>
+                </div>
+            `;
+            // 点击遮罩关闭
+            modal.addEventListener('click', function(e) {
+                if (e.target === modal) modal.remove();
+            });
+            document.body.appendChild(modal);
+        }
+
+        // 联系我们弹窗
+        function showContactModal() {
+            const modal = document.createElement('div');
+            modal.className = 'modal';
+            modal.innerHTML = `
+                <div class="modal-content">
+                    <span class="modal-close" onclick="this.parentNode.parentNode.remove()">&times;</span>
+                    <h2><i class="fas fa-envelope"></i> 联系我们</h2>
+                    <div style="margin: 1.5rem 0;">
+                        <p style="margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem;">
+                            <i class="fas fa-envelope" style="color: var(--primary-color);"></i>
+                            <strong>邮箱：</strong> 
+                            <a href="mailto:lupengli88@163.com" style="color: var(--primary-color); text-decoration: none;">lupengli88@163.com</a>
+                        </p>
+                        <p style="margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem;">
+                            <i class="fas fa-university" style="color: var(--primary-color);"></i>
+                            <strong>机构：</strong> School of Computer and Communication, Lanzhou University of Technology
+                        </p>
+                        <p style="margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem;">
+                            <i class="fas fa-map-marker-alt" style="color: var(--primary-color);"></i>
+                            <strong>地址：</strong> Lanzhou, Gansu, China
+                        </p>
+                        <p style="margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem;">
+                            <i class="fas fa-mail-bulk" style="color: var(--primary-color);"></i>
+                            <strong>邮编：</strong> 730050
+                        </p>
+                        <p style="margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem;">
+                            <i class="fas fa-clock" style="color: var(--primary-color);"></i>
+                            <strong>工作时间：</strong> 周一至周五 9:00-18:00
+                        </p>
+                    </div>
+                    <div style="text-align: center; margin-top: 1.5rem;">
+                        <button class="btn" onclick="window.open('mailto:lupengli88@163.com')">
+                            <i class="fas fa-envelope"></i> 发送邮件
+                        </button>
+                    </div>
                 </div>
             `;
             // 点击遮罩关闭
